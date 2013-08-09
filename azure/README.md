@@ -54,6 +54,10 @@ Instructions
 ------------
 
 * Install the requirements mentioned above.
+* Download your Windows Azure publish settings file:
+  * azure account download
+  * Log in with your Windows Azure account credentials.
+  * Let the browser save the file.
 * Copy the file azure-deployment-configuration-model.txt to a new file named
   azure-deployment-configuration.sh.
 * Edit azure-deployment-configuration.sh and configure it according to its
