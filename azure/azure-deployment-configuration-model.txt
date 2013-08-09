@@ -29,7 +29,7 @@ export AZURE_DEPLOYMENT_SUBSCRIPTION=""
 # Region where the resources will be created.
 # To see a list of locations available for your subscription, execute the command "azure vm location list".
 # Some choices may be "East US", "West US", "North Europe", "West Europe", "East Asia", "Southeast Asia".
-export AZURE_LOCATION=""
+export AZURE_DEPLOYMENT_LOCATION=""
 
 # Name of the deployment on Windows Azure.
 # It will be used as a prefix to name resources such as virtual machines.
