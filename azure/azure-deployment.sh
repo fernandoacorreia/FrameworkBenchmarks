@@ -22,3 +22,6 @@ echo ""
 bash ./azure-deployment-step1.sh || { echo "Step 1 failed."; exit 1; }
 bash ./azure-deployment-step2.sh || { echo "Step 2 failed."; exit 1; }
 bash ./azure-deployment-step3.sh || { echo "Step 3 failed."; exit 1; }
+bash ./azure-deployment-step4.sh || { echo "Step 4 failed."; exit 1; }
+
+# TODO delete .publish file

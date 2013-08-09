@@ -21,10 +21,12 @@ if [ ! -f $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION ]; then echo "File not foun
 
 if [ -z "$AZURE_DEPLOYMENT_SUBSCRIPTION" ]; then echo "AZURE_DEPLOYMENT_SUBSCRIPTION is not defined."; exit 1; fi
 
-if [ -z "$AZURE_LOCATION" ]; then echo "AZURE_LOCATION is not defined."; exit 1; fi
+if [ -z "$AZURE_DEPLOYMENT_LOCATION" ]; then echo "AZURE_DEPLOYMENT_LOCATION is not defined."; exit 1; fi
 
 if [ -z "$AZURE_DEPLOYMENT_NAME" ]; then echo "AZURE_DEPLOYMENT_NAME is not defined."; exit 1; fi
 if [ ${#AZURE_DEPLOYMENT_NAME} -gt 12 ]; then echo "AZURE_DEPLOYMENT_NAME must be at most 12 characters long."; exit 1; fi
+
+if [ -z "$AZURE_DEPLOYMENT_VM_SIZE" ]; then echo "AZURE_DEPLOYMENT_VM_SIZE is not defined."; exit 1; fi
 
 if [ -z "$AZURE_COMMAND" ]; then echo "AZURE_COMMAND is not defined."; exit 1; fi
 
