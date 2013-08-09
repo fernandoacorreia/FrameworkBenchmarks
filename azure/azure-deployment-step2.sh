@@ -2,7 +2,10 @@
 #
 # Bash script to deploy Web Framework Benchmarks on Windows Azure.
 #
-# Step 2: Configure Windows Azure command line tools
+# Step 2: Configure Windows Azure command line tools.
+#
+# This scripts configures the Windows Azure command line tools for the current user
+# with the account and subscription defined in the configuration.
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
