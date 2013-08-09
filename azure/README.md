@@ -53,6 +53,13 @@ To deploy the Web Framework Benchmarks suite on Windows Azure you will need:
 Instructions
 ------------
 
+* Install the requirements mentioned above.
+* Copy the file azure-deployment-configuration-model.txt to a new file named
+  azure-deployment-configuration.sh.
+* Edit azure-deployment-configuration.sh and configure it according to its
+  embedded documentation.
+* In a command prompt, run "bash azure-deployment.sh".
+
 
 Support
 -------

@@ -1,0 +1,14 @@
+#!/bin/bash  
+#
+# Bash script to configure the deployment of Web Framework Benchmarks on Windows Azure.
+#
+# This is a model file.
+#
+# Instructions:
+# - Copy this file to a new file named "azure-deployment-configuration.sh" on the same directory.
+# - Configure as documented below.
+#
+set -o igncr  # for Cygwin on Windows
+export SHELLOPTS
+
+export AZURE_DEPLOYMENT_SUBSCRIPTION=""
