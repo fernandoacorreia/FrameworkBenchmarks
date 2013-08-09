@@ -17,8 +17,10 @@ echo "**************************************************************************
 
 source ./azure-deployment-configuration.sh
 
-AZURE_AFFINITY_GROUP="$AZURE_DEPLOYMENT_NAME"
-echo "Creating affinity group $AZURE_AFFINITY_GROUP at $AZURE_LOCATION"
-$AZURE_COMMAND account affinity-group create $AZURE_AFFINITY_GROUP --location "$AZURE_LOCATION"
+echo "Creating affinity group $AZURE_DEPLOYMENT_NAME at $AZURE_LOCATION"
+$AZURE_COMMAND account affinity-group create $AZURE_DEPLOYMENT_NAME --location "$AZURE_LOCATION" || { echo "Error creating affinity group $AZURE_DEPLOYMENT_NAME."; exit 1; }
+
+echo "Creating storage account $AZURE_DEPLOYMENT_NAME"
+$AZURE_COMMAND account storage create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating storage account $AZURE_DEPLOYMENT_NAME."; exit 1; }
 
 echo ""
