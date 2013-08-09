@@ -26,10 +26,28 @@ export AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION=""
 # where "publishsettingsfile.publishsettings" is the publish settings file downloaded previously.
 export AZURE_DEPLOYMENT_SUBSCRIPTION=""
 
+# Region where the resources will be created.
+# To see a list of locations available for your subscription, execute the command "azure vm location list".
+# Some choices may be "East US", "West US", "North Europe", "West Europe", "East Asia", "Southeast Asia".
+export AZURE_LOCATION=""
+
+# Name of the deployment on Windows Azure.
+# It will be used as a prefix to name resources such as virtual machines.
+# It has to be globally unique within Windows Azure and it can be at most 12 characters long.
+# Suggestion: use the form "wfbMMDDHHmm" where:
+#    wfb stands for "Web Framework Benchmarks"
+#    MM is the current month with 2 digits
+#    DD is the current day with 2 digits
+#    HH is the hour part of the current time with 2 digits
+#    MM is the minutes part of the current time with 2 digits
+#    For example, for a deployment created at 4:23 pm, Aug 9th 2013:
+#    export AZURE_DEPLOYMENT_NAME="wfb08090423"
+export AZURE_DEPLOYMENT_NAME=""
+
 # Windows Azure command line program.
 # On Windows: export AZURE_COMMAND="cywgin_cmd azure.cmd"
 # On Linux/Mac: export AZURE_COMMAND="azure"
-export AZURE_COMMAND="cywgin_cmd azure.cmd"
+export AZURE_COMMAND=""
 
 #*****************************************************************************
 # STOP HERE - END OF CONFIGURATION
