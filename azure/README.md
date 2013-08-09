@@ -1,6 +1,8 @@
 ﻿Windows Azure Deployment
 ========================
 
+**WORK IN PROGRESS**
+
 This directory provides guidance and tooling for deploying the 
 Web Framework Benchmarks project on Windows Azure.
 
@@ -55,7 +57,7 @@ Instructions
 
 * Install the requirements mentioned above.
 * Download your Windows Azure publish settings file:
-  * azure account download
+  * In a command prompt, run "azure account download".
   * Log in with your Windows Azure account credentials.
   * Let the browser save the file.
 * Copy the file azure-deployment-configuration-model.txt to a new file named
