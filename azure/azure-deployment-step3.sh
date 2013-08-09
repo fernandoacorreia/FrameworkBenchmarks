@@ -23,4 +23,7 @@ $AZURE_COMMAND account affinity-group create $AZURE_DEPLOYMENT_NAME --location "
 echo "Creating storage account $AZURE_DEPLOYMENT_NAME"
 $AZURE_COMMAND account storage create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating storage account $AZURE_DEPLOYMENT_NAME."; exit 1; }
 
+echo "Creating virtual network $AZURE_DEPLOYMENT_NAME"
+$AZURE_COMMAND network vnet create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating virtual network $AZURE_DEPLOYMENT_NAME."; exit 1; }
+
 echo ""
