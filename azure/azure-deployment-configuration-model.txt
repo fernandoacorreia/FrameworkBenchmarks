@@ -11,10 +11,6 @@
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
 
-#*****************************************************************************
-# START OF CONFIGURATION
-#*****************************************************************************
-
 # Full pathname of the Windows Azure account publish settings file.
 # This file can be downloaded with the "azure account download" command.
 # For more information refer to http://www.windowsazure.com/en-us/manage/linux/other-resources/command-line-tools/
@@ -52,43 +48,3 @@ export AZURE_DEPLOYMENT_VM_SIZE="large"
 # On Windows: export AZURE_COMMAND="cywgin_cmd azure.cmd"
 # On Linux/Mac: export AZURE_COMMAND="azure"
 export AZURE_COMMAND="cywgin_cmd azure.cmd"
-
-#*****************************************************************************
-# STOP HERE - END OF CONFIGURATION
-#*****************************************************************************
-
-# What follows below are common definitions shared by the scripts, which 
-# are not supposed to require configuration.
-
-# Function used to invoke Windows batch files.
-# It removes cygwinisms from the PATH and the environment first
-# and does some argument pre-processing.
-# It also seems to fix the space problem.
-# Author: Igor Pechtchanski
-# http://cygwin.com/ml/cygwin/2004-09/msg00150.html
-cywgin_cmd () 
-{ 
-    ( local c="`cygpath -w \"$1\"`";
-    shift;
-    local cmd=`cygpath -u $COMSPEC`;
-    while [ $# != 0 ]; do
-        if [ -f "$1" ]; then
-            local args="$args '`cygpath -w $1`'";
-        else
-            if [ -d "$1" ]; then
-                local args="$args '`cygpath -w $1 | sed 's@\\\\\$@@'`'";
-            else
-                local args="$args '$1'";
-            fi;
-        fi;
-        shift;
-    done;
-    PATH=`echo $PATH |
-          tr : '\n' |
-          egrep -vw '^(/usr/local/bin|/usr/bin|/bin|/usr/X11R6/bin)$' |
-          tr '\n' :`;
-    unset BASH_ENV COLORTERM CYGWIN DISPLAY HISTCONTROL MAKE_MODE;
-    unset MANPATH PKG_CONFIG_PATH PS1 PWD SHLVL TERM USER _;
-    unset CVS CVSROOT CVS_RSH GEN_HOME GROOVY_HOME TOMCAT_DIR;
-    eval $cmd /c "$c" $args ) # TODO: seems to be losing return code; scripts don't abort when they should.
-}
