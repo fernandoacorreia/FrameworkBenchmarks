@@ -21,11 +21,11 @@ $AZURE_COMMAND vm list | grep -E "DNS Name|$AZURE_DEPLOYMENT_NAME" | cut -c 10-
 
 echo ""
 echo "Connection to the client VM:"
-echo "ssh -l ubuntu -i $AZURE_KEY_FILE $CLIENT_VM_NAME.cloudapp.net"
+echo "ssh ubuntu@$CLIENT_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE"
 
 echo ""
 echo "Connection to the Linux server VM:"
-echo "ssh -l ubuntu -i $AZURE_KEY_FILE $LINUX_SERVER_VM_NAME.cloudapp.net"
+echo "ssh ubuntu@$LINUX_SERVER_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE"
 
 echo ""
 echo "Connection to the Windows server VM:"

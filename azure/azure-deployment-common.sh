@@ -49,7 +49,7 @@ cywgin_cmd ()
 # Author: Carlos Justiniano
 # https://gist.github.com/cjus/1047794
 function jsonval {
-    temp=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop | awk -F": " '{print $2}'`
+    local temp=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop | awk -F": " '{print $2}'`
     echo ${temp##*|}
 }
 
@@ -57,18 +57,33 @@ function jsonval {
 # Parameters:
 # $1: VM name.
 function wait_until_vm_ready {
-    vm_name=$1
+    local vm_name=$1
     echo "Verifying status of VM $vm_name:"
-    vm_status=""
+    local vm_status=""
     until [[ "$vm_status" == "ReadyRole" ]]
     do
-        vm_properties=`$AZURE_COMMAND vm show $vm_name --json`
+        local vm_properties=`$AZURE_COMMAND vm show $vm_name --json`
         json=$vm_properties
         prop='InstanceStatus'
-        vm_status=`jsonval`
+        local vm_status=`jsonval`
         echo $vm_status
         if [[ "$vm_status" != "ReadyRole" ]]; then sleep 15s; fi
     done
+}
+
+# Runs a script on a remote Linux server.
+# Parameters:
+# $1: Operation description.
+# $2: Username.
+# $3: Remote server address.
+# $4: Key file.
+# $5: Filename of script to be executed.
+function run_remote_script {
+    local log_file="/tmp/$5.log"
+    echo "$1"
+    echo "Running script $5 on $3. To watch the progress, run in another terminal:"
+    echo "tail -f $log_file"
+    tr -d '\r' < $5 | ssh $2@$3 -i $4 "bash -s" >$log_file
 }
 
 # Variables used in several steps:
