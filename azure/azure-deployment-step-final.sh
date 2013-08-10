@@ -29,11 +29,13 @@ echo "ssh -l ubuntu -i $AZURE_KEY_FILE $LINUX_SERVER_VM_NAME.cloudapp.net"
 
 echo ""
 echo "Connection to the Windows server VM:"
-echo "Remote Desktop Connection to $WINDOWS_SERVER_VM_NAME.cloudapp.net with user $WINDOWS_SERVER_VM_NAME\Administrator"
+echo "mstsc /v:$WINDOWS_SERVER_VM_NAME.cloudapp.net /admin /f"
+echo "User name: $WINDOWS_SERVER_VM_NAME\Administrator"
 
 echo ""
 echo "Connection to the SQL Server VM:"
-echo "Remote Desktop Connection to $SQL_SERVER_VM_NAME.cloudapp.net with user $SQL_SERVER_VM_NAME\Administrator"
+echo "mstsc /v:$SQL_SERVER_VM_NAME.cloudapp.net /admin /f"
+echo "User name: $SQL_SERVER_VM_NAME\Administrator"
 
 echo ""
 echo "Windows Azure Management Portal:"
