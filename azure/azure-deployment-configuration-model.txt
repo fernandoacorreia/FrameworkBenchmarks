@@ -29,7 +29,7 @@ export AZURE_DEPLOYMENT_SUBSCRIPTION=""
 # Region where the resources will be created.
 # To see a list of locations available for your subscription, execute the command "azure vm location list".
 # Some choices may be "East US", "West US", "North Europe", "West Europe", "East Asia", "Southeast Asia".
-export AZURE_DEPLOYMENT_LOCATION=""
+export AZURE_DEPLOYMENT_LOCATION="East US"
 
 # Name of the deployment on Windows Azure.
 # It will be used as a prefix to name resources such as virtual machines.
@@ -44,10 +44,14 @@ export AZURE_DEPLOYMENT_LOCATION=""
 #    export AZURE_DEPLOYMENT_NAME="wfb08090423"
 export AZURE_DEPLOYMENT_NAME=""
 
+# Size of the virtual machines to be created.
+# Valid values include: extrasmall, small, medium, large, extralarge, a6, a7.
+export AZURE_DEPLOYMENT_VM_SIZE="large"
+
 # Windows Azure command line program.
 # On Windows: export AZURE_COMMAND="cywgin_cmd azure.cmd"
 # On Linux/Mac: export AZURE_COMMAND="azure"
-export AZURE_COMMAND=""
+export AZURE_COMMAND="cywgin_cmd azure.cmd"
 
 #*****************************************************************************
 # STOP HERE - END OF CONFIGURATION
