@@ -35,6 +35,10 @@ if [ -z "$AZURE_DEPLOYMENT_NAME" ]; then fail "AZURE_DEPLOYMENT_NAME is not defi
 if [ ${#AZURE_DEPLOYMENT_NAME} -gt 12 ]; then fail "AZURE_DEPLOYMENT_NAME must be at most 12 characters long."; fi
 echo "Deployment name: $AZURE_DEPLOYMENT_NAME"
 
+# Validate $AZURE_WINDOWS_PASSWORD.
+if [ -z "$AZURE_WINDOWS_PASSWORD" ]; then fail "AZURE_WINDOWS_PASSWORD is not defined."; fi
+if [ ${#AZURE_WINDOWS_PASSWORD} -lt 10 ]; then fail "AZURE_WINDOWS_PASSWORD must be at least 10 characters long."; fi
+
 # Validate AZURE_DEPLOYMENT_VM_SIZE.
 if [ -z "$AZURE_DEPLOYMENT_VM_SIZE" ]; then fail "AZURE_DEPLOYMENT_VM_SIZE is not defined."; fi
 echo "VM size: $AZURE_DEPLOYMENT_VM_SIZE"

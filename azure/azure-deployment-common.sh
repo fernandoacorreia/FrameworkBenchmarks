@@ -45,6 +45,32 @@ cywgin_cmd ()
     )
 } # TODO azure.cmd is not returning status code from node
 
+# Returns value of property stored in $prop on JSON object stored in $json.
+# Author: Carlos Justiniano
+# https://gist.github.com/cjus/1047794
+function jsonval {
+    temp=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop | awk -F": " '{print $2}'`
+    echo ${temp##*|}
+}
+
+# Waits until VM is ready.
+# Parameters:
+# $1: VM name.
+function wait_until_vm_ready {
+    vm_name=$1
+    echo "Verifying status of VM $vm_name:"
+    vm_status=""
+    until [[ "$vm_status" == "ReadyRole" ]]
+    do
+        vm_properties=`$AZURE_COMMAND vm show $vm_name --json`
+        json=$vm_properties
+        prop='InstanceStatus'
+        vm_status=`jsonval`
+        echo $vm_status
+        if [[ "$vm_status" != "ReadyRole" ]]; then sleep 15s; fi
+    done
+}
+
 # Variables used in several steps:
 export AZURE_SSH_DIR=$(eval echo ~${SUDO_USER})/.ssh
 export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
@@ -54,3 +80,4 @@ export AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
 export CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
 export LINUX_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}lsr"
 export WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"
+export SQL_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}sql"

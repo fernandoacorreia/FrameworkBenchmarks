@@ -35,6 +35,7 @@ The deployed environment will be composed of:
 * An Ubuntu VM for the benchmark client.
 * An Ubuntu VM for the Linux server.
 * A Windows Server VM for the Windows server.
+* A Windows Server VM for the Microsoft SQL Server database server.
 * A cloud service for each VM for access over the Internet.
 
 

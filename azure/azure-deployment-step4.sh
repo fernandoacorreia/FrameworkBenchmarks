@@ -50,13 +50,13 @@ echo $LATEST_UBUNTU_IMAGE
 # Create client VM.
 echo "Creating client VM: $CLIENT_VM_NAME"
 $AZURE_COMMAND vm create $CLIENT_VM_NAME $LATEST_UBUNTU_IMAGE ubuntu --ssh-cert "$AZURE_PEM_FILE" --no-ssh-password --vm-name $CLIENT_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --ssh --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $CLIENT_VM_NAME."
-echo "You can connect with SSH to this instance with this command:"
+echo "You can connect to this instance via SSH with this command:"
 echo "ssh -l ubuntu -i $AZURE_KEY_FILE $CLIENT_VM_NAME.cloudapp.net"
 
 # Create Ubuntu server VM.
 echo "Creating Linux server VM: $LINUX_SERVER_VM_NAME"
 $AZURE_COMMAND vm create $LINUX_SERVER_VM_NAME $LATEST_UBUNTU_IMAGE ubuntu --ssh-cert "$AZURE_PEM_FILE" --no-ssh-password --vm-name $LINUX_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --ssh --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $LINUX_SERVER_VM_NAME."
-echo "You can connect with SSH to this instance with this command:"
+echo "You can connect to this instance via SSH with this command:"
 echo "ssh -l ubuntu -i $AZURE_KEY_FILE $LINUX_SERVER_VM_NAME.cloudapp.net"
 
 # Get latest Windows Server 2012 Datacenter image.
@@ -66,6 +66,13 @@ echo $LATEST_WINDOWS_IMAGE
 
 # Create Windows server VM.
 echo "Creating Windows server VM: $WINDOWS_SERVER_VM_NAME"
-$AZURE_COMMAND vm create $WINDOWS_SERVER_VM_NAME $LATEST_WINDOWS_IMAGE Administrator ${WINDOWS_SERVER_VM_NAME}Password --vm-name $WINDOWS_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --rdp --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $WINDOWS_SERVER_VM_NAME."
+$AZURE_COMMAND vm create $WINDOWS_SERVER_VM_NAME $LATEST_WINDOWS_IMAGE Administrator $AZURE_WINDOWS_PASSWORD --vm-name $WINDOWS_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --rdp --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $WINDOWS_SERVER_VM_NAME."
+
+# Create SQL Server VM.
+echo "Creating SQL Server VM: $SQL_SERVER_VM_NAME"
+SQL_SERVER_IMAGE="fb83b3509582419d99629ce476bcb5c8__Microsoft-SQL-Server-2012SP1-CU4-11.0.3368.0-Standard-ENU-Win2012"
+echo "SQL Server image:"
+echo $SQL_SERVER_IMAGE
+$AZURE_COMMAND vm create $SQL_SERVER_VM_NAME $SQL_SERVER_IMAGE Administrator $AZURE_WINDOWS_PASSWORD --vm-name $SQL_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --rdp --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $SQL_SERVER_VM_NAME."
 
 echo ""
