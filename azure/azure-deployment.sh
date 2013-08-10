@@ -29,7 +29,9 @@ bash ./azure-deployment-step3.sh || fail "Step 3 failed."
 bash ./azure-deployment-step4.sh || fail "Step 4 failed."
 bash ./azure-deployment-step5.sh || fail "Step 5 failed."
 
-echo ""
-echo "Done."
+echo "******************************************************************************"
+echo "Done"
+echo "******************************************************************************"
+
 echo "Deployment name: $AZURE_DEPLOYMENT_NAME"
 echo "For your security, remember to delete the publish settings file at $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION"
