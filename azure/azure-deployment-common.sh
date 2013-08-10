@@ -41,5 +41,6 @@ cywgin_cmd ()
     unset BASH_ENV COLORTERM CYGWIN DISPLAY HISTCONTROL MAKE_MODE;
     unset MANPATH PKG_CONFIG_PATH PS1 PWD SHLVL TERM USER _;
     unset CVS CVSROOT CVS_RSH GEN_HOME GROOVY_HOME TOMCAT_DIR;
-    eval $cmd /c "$c" $args ) # TODO: seems to be losing return code; scripts don't abort when they should.
-}
+    eval $cmd /c "$c" $args || { status=$?; error "Status code $status executing $cmd /c \"$c\" $args"; return $status; }
+    )
+} # TODO azure.cmd is not returning status code from node
