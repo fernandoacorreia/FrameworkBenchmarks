@@ -40,6 +40,10 @@ export AZURE_DEPLOYMENT_LOCATION="East US"
 #    export AZURE_DEPLOYMENT_NAME="wfb08090423"
 export AZURE_DEPLOYMENT_NAME=""
 
+# Password for Windows servers.
+# Must be at least 10 characters long with mixed case, digits and special symbols.
+export AZURE_WINDOWS_PASSWORD=""
+
 # Size of the virtual machines to be created.
 # Valid values include: extrasmall, small, medium, large, extralarge, a6, a7.
 export AZURE_DEPLOYMENT_VM_SIZE="large"
