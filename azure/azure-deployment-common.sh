@@ -44,3 +44,13 @@ cywgin_cmd ()
     eval $cmd /c "$c" $args || { status=$?; error "Status code $status executing $cmd /c \"$c\" $args"; return $status; }
     )
 } # TODO azure.cmd is not returning status code from node
+
+# Variables used in several steps:
+export AZURE_SSH_DIR=$(eval echo ~${SUDO_USER})/.ssh
+export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
+export AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
+export AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
+export AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
+export CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
+export LINUX_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}lsr"
+export WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"

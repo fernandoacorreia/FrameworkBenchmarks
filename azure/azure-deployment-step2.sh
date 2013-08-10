@@ -14,8 +14,8 @@ echo "**************************************************************************
 echo "Step 2: Configure Windows Azure command line tools"
 echo "******************************************************************************"
 
-source ./azure-deployment-common.sh
 source ./azure-deployment-configuration.sh
+source ./azure-deployment-common.sh
 
 # Create directory for Windows Azure command line tools configuration.
 AZURE_HOME=$(eval echo ~${SUDO_USER})/.azure

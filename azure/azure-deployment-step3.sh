@@ -15,8 +15,8 @@ echo "**************************************************************************
 echo "Step 3: Create common resources"
 echo "******************************************************************************"
 
-source ./azure-deployment-common.sh
 source ./azure-deployment-configuration.sh
+source ./azure-deployment-common.sh
 
 # Create affinity group.
 echo "Creating affinity group $AZURE_DEPLOYMENT_NAME at $AZURE_DEPLOYMENT_LOCATION"

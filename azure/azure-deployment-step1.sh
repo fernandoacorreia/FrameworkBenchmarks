@@ -14,8 +14,8 @@ echo "**************************************************************************
 echo "Step 1: Validate configuration"
 echo "******************************************************************************"
 
-source ./azure-deployment-common.sh
 source ./azure-deployment-configuration.sh
+source ./azure-deployment-common.sh
 
 # Validate AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION.
 if [ -z "$AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION" ]; then fail "AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION is not defined."; fi
