@@ -22,8 +22,16 @@ echo "**************************************************************************
 
 source ./azure-deployment-configuration.sh
 
+LATEST_WINDOWS_IMAGE=$($AZURE_COMMAND vm image list | grep Windows-Server-2012-Datacenter | sort | tail -1 | cut -c 10-114)
+echo "Latest Windows Server 2012 Datacenter image:"
+echo $LATEST_WINDOWS_IMAGE
+
+WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"
+echo "Creating Windows server VM: $WINDOWS_SERVER_VM_NAME"
+$AZURE_COMMAND vm create $WINDOWS_SERVER_VM_NAME $LATEST_WINDOWS_IMAGE Administrator ${WINDOWS_SERVER_VM_NAME}Password --vm-name $WINDOWS_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --rdp --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating virtual machine $WINDOWS_SERVER_VM_NAME."; exit 1; }
+
 LATEST_UBUNTU_IMAGE=$($AZURE_COMMAND vm image list | grep Ubuntu_DAILY_BUILD-precise-12_04_2-LTS-amd64-server | sort | tail -1 | cut -c 10-114)
-echo "Latest daily Ubuntu 12.04 image:"
+echo "Latest Ubuntu Server 12.04 image:"
 echo $LATEST_UBUNTU_IMAGE
 
 CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
