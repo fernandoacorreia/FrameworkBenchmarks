@@ -14,19 +14,20 @@ echo "**************************************************************************
 echo "Step 2: Configure Windows Azure command line tools"
 echo "******************************************************************************"
 
+source ./azure-deployment-common.sh
 source ./azure-deployment-configuration.sh
 
 # Create directory for Windows Azure command line tools configuration.
 AZURE_HOME=$(eval echo ~${SUDO_USER})/.azure
 echo "Creating Windows Azure configuration directory at $AZURE_HOME"
-mkdir -p ${AZURE_HOME} || { echo "Error creating directory $AZURE_HOME."; exit 1; }
+mkdir -p ${AZURE_HOME} || fail "Error creating directory $AZURE_HOME."
 
 # Import publish settings.
 echo "Importing publish settings at $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION"
-$AZURE_COMMAND account import $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION || { echo "Error importing publish settings."; exit 1; }
+$AZURE_COMMAND account import $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION || fail "Error importing publish settings."
 
 # Set default subscription.
 echo "Setting default subscription to $AZURE_DEPLOYMENT_SUBSCRIPTION"
-$AZURE_COMMAND account set "$AZURE_DEPLOYMENT_SUBSCRIPTION" || { echo "Error setting default subscription."; exit 1; }
+$AZURE_COMMAND account set "$AZURE_DEPLOYMENT_SUBSCRIPTION" || fail "Error setting default subscription."
 
 echo ""

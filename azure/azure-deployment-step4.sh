@@ -20,30 +20,31 @@ echo "**************************************************************************
 echo "Step 4: Create virtual machines"
 echo "******************************************************************************"
 
+source ./azure-deployment-common.sh
 source ./azure-deployment-configuration.sh
 
 # Create directory for keys.
 AZURE_SSH_DIR=$(eval echo ~${SUDO_USER})/.ssh
 echo "Creating directory for keys at $AZURE_SSH_DIR"
-mkdir -p ${AZURE_SSH_DIR} || { echo "Error creating directory $AZURE_SSH_DIR."; exit 1; }
+mkdir -p ${AZURE_SSH_DIR} || fail "Error creating directory $AZURE_SSH_DIR."
 
 # Create key files.
 AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
 AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
 echo "Creating key at $AZURE_KEY_FILE"
-ssh-keygen -t rsa -b 2048 -f "$AZURE_KEY_FILE" -C "$AZURE_KEY_NAME" -q -N "" || { echo "Error creating SSH key."; exit 1; }
+ssh-keygen -t rsa -b 2048 -f "$AZURE_KEY_FILE" -C "$AZURE_KEY_NAME" -q -N "" || fail "Error creating SSH key."
 echo "--------------------------------------------------------------------------------"
 echo "WARNING: Protect this key file. It has no passphrase and is stored in plaintext."
 echo "--------------------------------------------------------------------------------"
 
 AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
 echo "Creating PEM file at $AZURE_PEM_FILE"
-openssl req -new -x509 -days 365 -subj "/CN=$AZURE_DEPLOYMENT_NAME/O=Web Framework Benchmarks" -key "$AZURE_KEY_FILE" -out "$AZURE_PEM_FILE" || { echo "Error creating PEM file."; exit 1; }
+openssl req -new -x509 -days 365 -subj "/CN=$AZURE_DEPLOYMENT_NAME/O=Web Framework Benchmarks" -key "$AZURE_KEY_FILE" -out "$AZURE_PEM_FILE" || fail "Error creating PEM file."
 chmod 600 "$AZURE_PEM_FILE"
 
 AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
 echo "Creating CER file at $AZURE_CER_FILE"
-openssl x509 -outform der -in "$AZURE_PEM_FILE" -out "$AZURE_CER_FILE"
+openssl x509 -outform der -in "$AZURE_PEM_FILE" -out "$AZURE_CER_FILE" || fail "Error creating CER file."
 chmod 600 "$AZURE_CER_FILE"
 
 # Get latest Ubuntu Server 12.04 daily VM image.
@@ -54,14 +55,14 @@ echo $LATEST_UBUNTU_IMAGE
 # Create client VM.
 CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
 echo "Creating client VM: $CLIENT_VM_NAME"
-$AZURE_COMMAND vm create $CLIENT_VM_NAME $LATEST_UBUNTU_IMAGE ubuntu --ssh-cert "$AZURE_PEM_FILE" --no-ssh-password --vm-name $CLIENT_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --ssh --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating virtual machine $CLIENT_VM_NAME."; exit 1; }
+$AZURE_COMMAND vm create $CLIENT_VM_NAME $LATEST_UBUNTU_IMAGE ubuntu --ssh-cert "$AZURE_PEM_FILE" --no-ssh-password --vm-name $CLIENT_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --ssh --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $CLIENT_VM_NAME."
 echo "You can connect with SSH to this instance with this command:"
 echo "ssh -l ubuntu -i $AZURE_KEY_FILE $CLIENT_VM_NAME.cloudapp.net"
 
 # Create Ubuntu server VM.
 LINUX_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}lsr"
 echo "Creating Linux server VM: $LINUX_SERVER_VM_NAME"
-$AZURE_COMMAND vm create $LINUX_SERVER_VM_NAME $LATEST_UBUNTU_IMAGE ubuntu --ssh-cert "$AZURE_PEM_FILE" --no-ssh-password --vm-name $LINUX_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --ssh --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating virtual machine $LINUX_SERVER_VM_NAME."; exit 1; }
+$AZURE_COMMAND vm create $LINUX_SERVER_VM_NAME $LATEST_UBUNTU_IMAGE ubuntu --ssh-cert "$AZURE_PEM_FILE" --no-ssh-password --vm-name $LINUX_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --ssh --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $LINUX_SERVER_VM_NAME."
 echo "You can connect with SSH to this instance with this command:"
 echo "ssh -l ubuntu -i $AZURE_KEY_FILE $LINUX_SERVER_VM_NAME.cloudapp.net"
 
@@ -73,6 +74,6 @@ echo $LATEST_WINDOWS_IMAGE
 # Create Windows server VM.
 WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"
 echo "Creating Windows server VM: $WINDOWS_SERVER_VM_NAME"
-$AZURE_COMMAND vm create $WINDOWS_SERVER_VM_NAME $LATEST_WINDOWS_IMAGE Administrator ${WINDOWS_SERVER_VM_NAME}Password --vm-name $WINDOWS_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --rdp --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating virtual machine $WINDOWS_SERVER_VM_NAME."; exit 1; }
+$AZURE_COMMAND vm create $WINDOWS_SERVER_VM_NAME $LATEST_WINDOWS_IMAGE Administrator ${WINDOWS_SERVER_VM_NAME}Password --vm-name $WINDOWS_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --rdp --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $WINDOWS_SERVER_VM_NAME."
 
 echo ""

@@ -19,9 +19,11 @@ export SHELLOPTS
 echo "Deploying Web Framework Benchmarks to Windows Azure..."
 echo ""
 
-bash ./azure-deployment-step1.sh || { echo "Step 1 failed."; exit 1; }
-bash ./azure-deployment-step2.sh || { echo "Step 2 failed."; exit 1; }
-bash ./azure-deployment-step3.sh || { echo "Step 3 failed."; exit 1; }
-bash ./azure-deployment-step4.sh || { echo "Step 4 failed."; exit 1; }
+source ./azure-deployment-common.sh
+
+bash ./azure-deployment-step1.sh || fail "Step 1 failed."
+bash ./azure-deployment-step2.sh || fail "Step 2 failed."
+bash ./azure-deployment-step3.sh || fail "Step 3 failed."
+bash ./azure-deployment-step4.sh || fail "Step 4 failed."
 
 # TODO delete .publish file

@@ -15,18 +15,19 @@ echo "**************************************************************************
 echo "Step 3: Create common resources"
 echo "******************************************************************************"
 
+source ./azure-deployment-common.sh
 source ./azure-deployment-configuration.sh
 
 # Create affinity group.
 echo "Creating affinity group $AZURE_DEPLOYMENT_NAME at $AZURE_DEPLOYMENT_LOCATION"
-$AZURE_COMMAND account affinity-group create $AZURE_DEPLOYMENT_NAME --location "$AZURE_DEPLOYMENT_LOCATION" || { echo "Error creating affinity group $AZURE_DEPLOYMENT_NAME."; exit 1; }
+$AZURE_COMMAND account affinity-group create $AZURE_DEPLOYMENT_NAME --location "$AZURE_DEPLOYMENT_LOCATION" || fail "Error creating affinity group $AZURE_DEPLOYMENT_NAME."
 
 # Create storage account.
 echo "Creating storage account $AZURE_DEPLOYMENT_NAME"
-$AZURE_COMMAND account storage create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating storage account $AZURE_DEPLOYMENT_NAME."; exit 1; }
+$AZURE_COMMAND account storage create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating storage account $AZURE_DEPLOYMENT_NAME."
 
 # Create virtual network.
 echo "Creating virtual network $AZURE_DEPLOYMENT_NAME"
-$AZURE_COMMAND network vnet create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || { echo "Error creating virtual network $AZURE_DEPLOYMENT_NAME."; exit 1; }
+$AZURE_COMMAND network vnet create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual network $AZURE_DEPLOYMENT_NAME."
 
 echo ""
