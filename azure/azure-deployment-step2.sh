@@ -19,7 +19,7 @@ source ./azure-deployment-configuration.sh
 # Create directory for Windows Azure command line tools configuration.
 AZURE_HOME=$(eval echo ~${SUDO_USER})/.azure
 echo "Creating Windows Azure configuration directory at $AZURE_HOME"
-mkdir -p ${AZURE_HOME} || { echo "Error creating directory directory $AZURE_HOME."; exit 1; }
+mkdir -p ${AZURE_HOME} || { echo "Error creating directory $AZURE_HOME."; exit 1; }
 
 # Import publish settings.
 echo "Importing publish settings at $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION"
