@@ -21,4 +21,14 @@ echo "Installing git"
 sudo apt-get install git-core
 
 echo ""
+echo "Clone FrameworkBenchmarks repository"
+git clone https://github.com/TechEmpower/FrameworkBenchmarks.git ~/FrameworkBenchmarks
+cd ~/FrameworkBenchmarks
+git branch
+git log -1 --pretty=format:"%H %s"
+echo ""
+pwd
+ls -C
+
+echo ""
 echo "End of step 1"
