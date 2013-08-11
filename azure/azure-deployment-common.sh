@@ -5,6 +5,18 @@
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
 
+# Variables used in several steps:
+export AZURE_SSH_DIR=$(eval echo ~${SUDO_USER})/.ssh
+export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
+export AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
+export AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
+export AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
+export CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
+export LINUX_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}lsr"
+export WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"
+export SQL_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}sql"
+export AZURE_LOG_DIR="/var/log/${AZURE_DEPLOYMENT_NAME}"
+
 # Displays error message.
 error() { echo "ERROR: $@" 1>&2; }
 
@@ -79,20 +91,10 @@ function wait_until_vm_ready {
 # $4: Key file.
 # $5: Filename of script to be executed.
 function run_remote_script {
-    local log_file="/tmp/$5.log"
+    local log_file="$AZURE_LOG_DIR/$5.log"
     echo "$1"
     echo "Running script $5 on $3. To watch the progress, run in another terminal:"
     echo "tail -f $log_file"
-    tr -d '\r' < $5 | ssh $2@$3 -i $4 "bash -s" >$log_file
+    mkdir -p $AZURE_LOG_DIR
+    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "bash -s" &>$log_file
 }
-
-# Variables used in several steps:
-export AZURE_SSH_DIR=$(eval echo ~${SUDO_USER})/.ssh
-export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
-export AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
-export AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
-export AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
-export CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
-export LINUX_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}lsr"
-export WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"
-export SQL_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}sql"

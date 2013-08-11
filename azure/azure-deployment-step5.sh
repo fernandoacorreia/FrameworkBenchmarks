@@ -21,12 +21,6 @@ wait_until_vm_ready $LINUX_SERVER_VM_NAME
 echo ""
 run_remote_script "Instaling prerequisites." "ubuntu" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-1.sh"
 
-# Configure firewall.
-# TODO
-
-# Clone project repository.
-# TODO
-
 # Install software.
 # TODO
 

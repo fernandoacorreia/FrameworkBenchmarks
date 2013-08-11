@@ -16,6 +16,9 @@ echo "**************************************************************************
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
 
+echo "Log files for remote scripts are in $AZURE_LOG_DIR"
+
+echo ""
 echo "VMs deployed:"
 $AZURE_COMMAND vm list | grep -E "DNS Name|$AZURE_DEPLOYMENT_NAME" | cut -c 10-
 

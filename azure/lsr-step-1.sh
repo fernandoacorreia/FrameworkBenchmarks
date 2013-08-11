@@ -8,6 +8,13 @@ echo "Host:" `hostname`
 echo "Step 1: Install prerequisites"
 
 echo ""
+echo "Configuring firewall"
+sudo iptables -A INPUT -j ACCEPT -m state --state ESTABLISHED,RELATED
+sudo iptables -A INPUT -j ACCEPT -m state --state NEW -p tcp --source 10.0.0.0/11
+sudo iptables -A OUTPUT -j ACCEPT -m state --state ESTABLISHED,RELATED
+sudo iptables -L
+
+echo ""
 echo "Updating package information"
 export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update
@@ -18,7 +25,7 @@ sudo apt-get upgrade -qq
 
 echo ""
 echo "Installing git"
-sudo apt-get install git-core
+sudo apt-get install git -qq
 
 echo ""
 echo "Clone FrameworkBenchmarks repository"
