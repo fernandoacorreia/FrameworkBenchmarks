@@ -46,6 +46,8 @@ export AZURE_WINDOWS_PASSWORD=""
 
 # Size of the virtual machines to be created.
 # Valid values include: extrasmall, small, medium, large, extralarge, a6, a7.
+# Warning: To use extralarge or bigger you may have to ask Windows Azure support
+# to increase the core limit of your subscription. It's initially limited to 20 cores.
 export AZURE_DEPLOYMENT_VM_SIZE="large"
 
 # Windows Azure command line program.
