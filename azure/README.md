@@ -68,6 +68,26 @@ Instructions
 * In a command prompt, run "bash azure-deployment.sh".
 
 
+Billing
+-------
+
+On Windows Azure, a free trial account and member offers (e.g. MSDN) have by
+default a spending limit of $0. When your usage exhausts the monthly amounts 
+included in your offer, your service will be disabled for the remainder of 
+that billing month. You have the option to continue using the services by
+removing the spending limit.
+
+To avoid consuming your credits (in case of an account with spending limit)
+or incurring in charges (in case of an account without spending limit),
+you can stop the virtual machines and, optionally, remove their disk images.
+Virtual machines in state "Stopped (Deallocated)" don't incur in charges.
+The disk images incur in (relatively small) storage charges.
+
+For more information refer to
+[Windows Azure Spending Limit](http://www.windowsazure.com/en-us/pricing/spending-limits/)
+and [Pricing Overview](http://www.windowsazure.com/en-us/pricing/overview/).
+
+
 Support
 -------
 * [Google Groups](https://groups.google.com/forum/?fromgroups=#!forum/framework-benchmarks)
