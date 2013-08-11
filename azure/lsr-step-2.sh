@@ -7,18 +7,21 @@
 echo "Host:" `hostname`
 echo "Step 2: Install software on Linux server"
 
-echo ""
-if [ -z "$server_private_ip" ]; then echo "server_private_ip is not defined."; exit 1; fi
-echo "server_private_ip: $server_private_ip"
-if [ -z "$client_private_ip" ]; then echo "client_private_ip is not defined."; exit 1; fi
-echo "client_private_ip: $client_private_ip"
-if [ -z "$path_to_key" ]; then echo "path_to_key is not defined."; exit 1; fi
-echo "path_to_key: $path_to_key"
+export DEBIAN_FRONTEND=noninteractive
 
 echo ""
-echo "Install software"
+source ~/bin/benchmark-configuration.sh
+if [ -z "$BENCHMARK_SERVER_IP" ]; then echo "BENCHMARK_SERVER_IP is not defined."; exit 1; fi
+echo "BENCHMARK_SERVER_IP: $BENCHMARK_SERVER_IP"
+if [ -z "$BENCHMARK_CLIENT_IP" ]; then echo "BENCHMARK_CLIENT_IP is not defined."; exit 1; fi
+echo "BENCHMARK_CLIENT_IP: $BENCHMARK_CLIENT_IP"
+if [ -z "$BENCHMARK_KEY_PATH" ]; then echo "BENCHMARK_KEY_PATH is not defined."; exit 1; fi
+echo "BENCHMARK_KEY_PATH: $BENCHMARK_KEY_PATH"
+
+echo ""
+echo "Installing software"
 cd ~/FrameworkBenchmarks
-#./run-tests.py -s "$server_private_ip" -c "$client_private_ip" -i "$path_to_key" --install-software
+./run-tests.py -s "$BENCHMARK_SERVER_IP" -c "$BENCHMARK_CLIENT_IP" -i "$BENCHMARK_KEY_PATH" --install-software
 
 # TODO See what goes where
 # 
@@ -36,8 +39,4 @@ cd ~/FrameworkBenchmarks
 #   mongo --host client-private-ip < config/create.js
 
 echo ""
-echo "List tests"
-./run-tests.py -s "$server_private_ip" -c "$client_private_ip" -i "$path_to_key" --list-tests
-
-echo ""
-echo "End of step 1"
+echo "End of step 2"

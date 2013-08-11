@@ -2,7 +2,7 @@
 #
 # Bash script to deploy Web Framework Benchmarks on Windows Azure.
 #
-# Final step: Instructions.
+# Final step: Cleanup and instructions.
 #
 # This script prints instructions after the deployment has completed.
 #
@@ -10,13 +10,15 @@ set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
 
 echo "******************************************************************************"
-echo "Final step: Instructions"
+echo "Final step: Cleanup and instructions"
 echo "******************************************************************************"
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
 
-echo "Log files for remote scripts are in $AZURE_LOG_DIR"
+echo "Cleaning up temporary files."
+[ -f "$AZURE_LINUX_CONFIGURATION_KEY_FILE" ] && rm $AZURE_LINUX_CONFIGURATION_KEY_FILE
+[ -f "$AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION" ] && rm $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION
 
 echo ""
 echo "VMs deployed:"
@@ -24,11 +26,11 @@ $AZURE_COMMAND vm list | grep -E "DNS Name|$AZURE_DEPLOYMENT_NAME" | cut -c 10-
 
 echo ""
 echo "Connection to the client VM:"
-echo "ssh ubuntu@$CLIENT_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE"
+echo "ssh $AZURE_LINUX_USER@$CLIENT_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE"
 
 echo ""
 echo "Connection to the Linux server VM:"
-echo "ssh ubuntu@$LINUX_SERVER_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE"
+echo "ssh $AZURE_LINUX_USER@$LINUX_SERVER_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE"
 
 echo ""
 echo "Connection to the Windows server VM:"
@@ -45,5 +47,9 @@ echo "Windows Azure Management Portal:"
 echo "https://manage.windowsazure.com"
 
 echo ""
-echo "WARNING: For your security, remember to delete the publish settings file at:"
-echo "$AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION"
+echo "Log files for remote script execution:"
+echo "$AZURE_LOG_DIR"
+
+# TODO: instructions to stop and start the VMs
+# TODO: instructions to list tests available at each server
+# TODO: instructions to run tests

@@ -7,9 +7,12 @@
 echo "Host:" `hostname`
 echo "Step 1: Install prerequisites"
 
+export DEBIAN_FRONTEND=noninteractive
+
 echo ""
 echo "Creating required directories"
-mkdir -p "/home/ubuntu/.ssh"
+mkdir -p ~/.ssh
+mkdir -p ~/bin
 
 echo ""
 echo "Configuring firewall"
@@ -20,7 +23,6 @@ sudo iptables -L
 
 echo ""
 echo "Updating package information"
-export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update
 
 echo ""

@@ -26,21 +26,28 @@ echo "$CLIENT_IP"
 
 # Install prerequisites.
 echo ""
-run_remote_script "Instaling prerequisites." "ubuntu" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-1.sh" "" || fail "Error running script."
+run_remote_script "Instaling prerequisites." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-1.sh" || fail "Error running script."
 
 # Copy key to server
 echo ""
-echo "Uploading key file to $LINUX_SERVER_VM_NAME.cloudapp.net:$AZURE_SSH_DIR_ON_SERVER"
-scp -i $AZURE_KEY_FILE $AZURE_KEY_FILE "ubuntu@$LINUX_SERVER_VM_NAME.cloudapp.net:$AZURE_SSH_DIR_ON_SERVER" || fail "Error uploading key."
+upload_file "$AZURE_KEY_FILE" "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "~/.ssh" "$AZURE_KEY_FILE"
 
-# TODO
-# Create a script on server that sets:
-#server_private_ip: 10.32.0.4                     
-#client_private_ip: 10.32.0.12                    
-#path_to_key: /home/ubuntu/.ssh/id_rsa-wfb08102205
+# Create Linux host configuration script.
+echo ""
+echo "Creating Linux host configuration script at $AZURE_LINUX_CONFIGURATION_FILE"
+cat >$AZURE_LINUX_CONFIGURATION_FILE <<_EOF_
+#!/bin/bash
+export BENCHMARK_SERVER_IP=$LINUX_SERVER_IP
+export BENCHMARK_CLIENT_IP=$CLIENT_IP
+export BENCHMARK_KEY_PATH=~/.ssh/$AZURE_KEY_NAME
+_EOF_
+
+# Upload Linux host configuration script.
+echo ""
+upload_file "$AZURE_LINUX_CONFIGURATION_FILE" "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "~/bin" "$AZURE_KEY_FILE"
 
 # Install software.
 echo ""
-run_remote_script "Instaling software." "ubuntu" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-2.sh" "server_private_ip=$LINUX_SERVER_IP client_private_ip=$CLIENT_IP path_to_key=$AZURE_KEY_ON_SERVER" || fail "Error running script."
+run_remote_script "Instaling software." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-2.sh" || fail "Error running script."
 
 echo ""

@@ -6,11 +6,10 @@ set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
 
 # Variables used in several steps:
+export AZURE_LINUX_USER="ubuntu"
 export AZURE_SSH_DIR=$(eval echo ~${SUDO_USER})/.ssh
 export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
 export AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
-export AZURE_SSH_DIR_ON_SERVER="/home/ubuntu/.ssh"
-export AZURE_KEY_ON_SERVER="$AZURE_SSH_DIR_ON_SERVER/${AZURE_KEY_NAME}"
 export AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
 export AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
 export CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
@@ -18,6 +17,7 @@ export LINUX_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}lsr"
 export WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"
 export SQL_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}sql"
 export AZURE_LOG_DIR="/var/log/${AZURE_DEPLOYMENT_NAME}"
+export AZURE_LINUX_CONFIGURATION_FILE="/tmp/benchmark-configuration.sh"
 
 # Displays error message.
 error() { echo "ERROR: $@" 1>&2; }
@@ -87,19 +87,35 @@ function get_vm_ip {
     echo $ip_address
 }
 
-# Runs a script on a remote Linux server.
+# Runs a script on a remote Linux host.
 # Parameters:
 # $1: Operation description.
 # $2: Username.
-# $3: Remote server address.
+# $3: Remote host address.
 # $4: Key file.
 # $5: Filename of script to be executed.
-# $6: Variables to set.
 function run_remote_script {
     local log_file="$AZURE_LOG_DIR/$5.log"
     echo "$1"
     echo "Running script $5 on $3. To watch the progress, run in another terminal:"
     echo "tail -f $log_file"
     mkdir -p $AZURE_LOG_DIR
-    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $6 "bash -s" &>$log_file
+    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "bash -s" &>$log_file
+}
+
+# Uploads a file to a remote Linux host.
+# Parameters:
+# $1 File to upload.
+# $2 Remote user.
+# $3 Remote host.
+# $4 Target directory.
+# $5 Private key file.
+function upload_file {
+    local file_to_upload=$1
+    local remote_user=$2
+    local remote_host=$3
+    local target_directory=$4
+    local private_key_file=$5
+    echo "Uploading file $file_to_upload to $remote_host:$target_directory"
+    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i "$private_key_file" "$file_to_upload" "$remote_user@$remote_host:$target_directory" || fail "Error uploading file."
 }
