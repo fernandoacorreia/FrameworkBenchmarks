@@ -8,6 +8,10 @@ echo "Host:" `hostname`
 echo "Step 1: Install prerequisites"
 
 echo ""
+echo "Creating required directories"
+mkdir -p "/home/ubuntu/.ssh"
+
+echo ""
 echo "Configuring firewall"
 sudo iptables -A INPUT -j ACCEPT -m state --state ESTABLISHED,RELATED
 sudo iptables -A INPUT -j ACCEPT -m state --state NEW -p tcp --source 10.0.0.0/11

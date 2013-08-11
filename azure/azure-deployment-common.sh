@@ -9,6 +9,8 @@ export SHELLOPTS
 export AZURE_SSH_DIR=$(eval echo ~${SUDO_USER})/.ssh
 export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
 export AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
+export AZURE_SSH_DIR_ON_SERVER="/home/ubuntu/.ssh"
+export AZURE_KEY_ON_SERVER="$AZURE_SSH_DIR_ON_SERVER/${AZURE_KEY_NAME}"
 export AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
 export AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
 export CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
@@ -65,12 +67,11 @@ function jsonval {
     echo ${temp##*|}
 }
 
-# Waits until VM is ready.
+# Waits until the VM is ready returns its internal IP address.
 # Parameters:
-# $1: VM name.
-function wait_until_vm_ready {
+# $1: Name of the VM.
+function get_vm_ip {
     local vm_name=$1
-    echo "Verifying status of VM $vm_name:"
     local vm_status=""
     until [[ "$vm_status" == "ReadyRole" ]]
     do
@@ -78,9 +79,12 @@ function wait_until_vm_ready {
         json=$vm_properties
         prop='InstanceStatus'
         local vm_status=`jsonval`
-        echo $vm_status
-        if [[ "$vm_status" != "ReadyRole" ]]; then sleep 15s; fi
+        if [[ "$vm_status" != "ReadyRole" ]]; then sleep 10s; fi
     done
+    prop='IPAddress'
+    local ip_address=`jsonval`
+    if [ -z "$ip_address" ]; then fail "ip_address not found."; fi
+    echo $ip_address
 }
 
 # Runs a script on a remote Linux server.
@@ -90,11 +94,12 @@ function wait_until_vm_ready {
 # $3: Remote server address.
 # $4: Key file.
 # $5: Filename of script to be executed.
+# $6: Variables to set.
 function run_remote_script {
     local log_file="$AZURE_LOG_DIR/$5.log"
     echo "$1"
     echo "Running script $5 on $3. To watch the progress, run in another terminal:"
     echo "tail -f $log_file"
     mkdir -p $AZURE_LOG_DIR
-    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "bash -s" &>$log_file
+    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $6 "bash -s" &>$log_file
 }
