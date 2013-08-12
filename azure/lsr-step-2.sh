@@ -21,22 +21,41 @@ echo "BENCHMARK_KEY_PATH: $BENCHMARK_KEY_PATH"
 echo ""
 echo "Installing software"
 cd ~/FrameworkBenchmarks
-./run-tests.py -s "$BENCHMARK_SERVER_IP" -c "$BENCHMARK_CLIENT_IP" -i "$BENCHMARK_KEY_PATH" --install-software --list-tests
+./run-tests.py -s "$BENCHMARK_SERVER_IP" -c "$BENCHMARK_CLIENT_IP" -i "$BENCHMARK_KEY_PATH" --install-software --list-tests || { echo "Error installing software."; exit 1; }
 
-# TODO See what goes where
-# 
-# source ~/.bash_profile
-# For your first time through the tests, set the ulimit for open files
-# ulimit -n 8192
-# Most software is installed autormatically by the script, but running the mongo command below from 
-# the install script was causing some errors. For now this needs to be run manually.
-# cd installs/jruby-rack && rvm jruby-1.7.4 do jruby -S bundle exec rake clean gem SKIP_SPECS=true
-# cd target && rvm jruby-1.7.4 do gem install jruby-rack-1.2.0.SNAPSHOT.gem
-# cd ../../..
-# cd installs && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
-# cd ..
-# sudo apt-get remove --purge openjdk-6-jre openjdk-6-jre-headless
-#   mongo --host client-private-ip < config/create.js
+echo ""
+echo "First-time setup:"
+
+echo "source ~/.bash_profile"
+source ~/.bash_profile
+
+echo "ulimit -n 8192"
+ulimit -n 8192
+
+echo "cd installs/jruby-rack && rvm jruby-1.7.4 do jruby -S bundle exec rake clean gem SKIP_SPECS=true"
+cd installs/jruby-rack && rvm jruby-1.7.4 do jruby -S bundle exec rake clean gem SKIP_SPECS=true
+
+echo "cd target && rvm jruby-1.7.4 do gem install jruby-rack-1.2.0.SNAPSHOT.gem"
+cd target && rvm jruby-1.7.4 do gem install jruby-rack-1.2.0.SNAPSHOT.gem
+
+echo "cd ../../.."
+cd ../../..
+
+echo "cd installs && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin"
+cd installs && curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
+
+echo "cd .."
+cd ..
+
+echo "sudo apt-get remove --purge openjdk-6-jre openjdk-6-jre-headless"
+sudo apt-get remove --purge openjdk-6-jre openjdk-6-jre-headless -qq
+
+echo "mongo --host $BENCHMARK_CLIENT_IP < config/create.js"
+mongo --host $BENCHMARK_CLIENT_IP < config/create.js
 
 echo ""
 echo "End of step 2"
+
+echo ""
+echo "Restarting " `hostname`
+sudo shutdown -r now
