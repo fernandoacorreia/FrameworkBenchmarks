@@ -21,7 +21,7 @@ echo "BENCHMARK_KEY_PATH: $BENCHMARK_KEY_PATH"
 echo ""
 echo "Installing software"
 cd ~/FrameworkBenchmarks
-./run-tests.py -s "$BENCHMARK_SERVER_IP" -c "$BENCHMARK_CLIENT_IP" -i "$BENCHMARK_KEY_PATH" --install-software
+./run-tests.py -s "$BENCHMARK_SERVER_IP" -c "$BENCHMARK_CLIENT_IP" -i "$BENCHMARK_KEY_PATH" --install-software --list-tests
 
 # TODO See what goes where
 # 

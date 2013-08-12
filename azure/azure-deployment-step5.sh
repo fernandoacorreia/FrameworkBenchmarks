@@ -48,6 +48,6 @@ upload_file "$AZURE_LINUX_CONFIGURATION_FILE" "$AZURE_LINUX_USER" "$LINUX_SERVER
 
 # Install software.
 echo ""
-run_remote_script "Instaling software." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-2.sh" || fail "Error running script."
+run_remote_script "Installing benchmark software on the Linux server. This may take about 2 hours." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-2.sh" || fail "Error running script."
 
 echo ""
