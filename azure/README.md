@@ -49,6 +49,7 @@ To deploy the Web Framework Benchmarks suite on Windows Azure you will need:
 * Windows Azure Cross-platform Command Line Interface, available for
   [free download](https://www.windowsazure.com/en-us/downloads/#cmd-line-tools)
   for Windows, Mac and Linux.
+  * On Ubuntu, run the provided `ubuntu-wacli-install.sh` script.
 * (Windows only) [Cygwin](http://www.cygwin.com/) for Linux-compatible command line tools on Windows.
   A PowerShell script (InstallCygwin.ps1) is provided for easy, automatic installation.
 
