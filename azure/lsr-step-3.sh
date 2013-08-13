@@ -23,7 +23,7 @@ function first_time_setup {
     curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
     cd ..
     sudo apt-get remove --purge openjdk-6-jre openjdk-6-jre-headless -qq
-    mongo --host $BENCHMARK_CLIENT_IP < config/create.js
+    mongo --host $BENCHMARK_CLIENT_IP < config/create.js || { echo "Error configuring mongo."; exit 1; }
     echo ""
     echo "End of step 3"
 }

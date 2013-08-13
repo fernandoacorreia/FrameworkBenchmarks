@@ -51,9 +51,11 @@ echo ""
 run_remote_script "Installing benchmark software on the Linux server. This may take about 2 hours." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-2.sh" || fail "Error running script."
 
 # First-time setup.
+echo ""
 run_remote_script "First-time setup." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-3.sh" || fail "Error running script."
 
-# Restart Linux server.
+# Restart Linux server due to "System restart required".
+echo ""
 run_remote_script "Restarting Linux server." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-4.sh" || fail "Error running script."
 
 echo ""
