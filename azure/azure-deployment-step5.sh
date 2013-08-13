@@ -26,7 +26,7 @@ echo "$CLIENT_IP"
 
 # Install prerequisites.
 echo ""
-run_remote_script "Instaling prerequisites." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-1.sh" || fail "Error running script."
+run_remote_script "Installing prerequisites." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-1.sh" || fail "Error running script."
 
 # Copy key to server
 echo ""
