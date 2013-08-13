@@ -100,7 +100,7 @@ function run_remote_script {
     echo "Running script $5 on $3. To watch the progress, run in another terminal:"
     echo "tail -f $log_file"
     mkdir -p $AZURE_LOG_DIR
-    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "bash -s" &>$log_file
+    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "bash -x -s" &>$log_file
 }
 
 # Uploads a file to a remote Linux host.
