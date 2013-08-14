@@ -8,6 +8,7 @@
 #
 # Note: This script was tested on a brand-new Ubuntu Server 12.04 VM.
 #
+set -o nounset -o errexit
 
 # Install node from community repository.
 # https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager#ubuntu-mint

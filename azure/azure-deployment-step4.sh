@@ -15,13 +15,14 @@
 # For more information refer to https://www.windowsazure.com/en-us/documentation/services/virtual-machines/
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
-
-echo "******************************************************************************"
-echo "Step 4: Create virtual machines"
-echo "******************************************************************************"
+set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
+
+information "******************************************************************************"
+information "Step 4: Create virtual machines"
+information "******************************************************************************"
 
 # Create directory for keys.
 echo "Creating directory for keys at $AZURE_SSH_DIR"
@@ -30,9 +31,9 @@ mkdir -p ${AZURE_SSH_DIR} || fail "Error creating directory $AZURE_SSH_DIR."
 # Create key files.
 echo "Creating key at $AZURE_KEY_FILE"
 ssh-keygen -t rsa -b 2048 -f "$AZURE_KEY_FILE" -C "$AZURE_KEY_NAME" -q -N "" || fail "Error creating SSH key."
-echo "--------------------------------------------------------------------------------"
-echo "WARNING: Protect this key file. It has no passphrase and is stored in plaintext."
-echo "--------------------------------------------------------------------------------"
+warning "--------------------------------------------------------------------------------"
+warning "WARNING: Protect this key file. It has no passphrase and is stored in plaintext."
+warning "--------------------------------------------------------------------------------"
 
 echo "Creating PEM file at $AZURE_PEM_FILE"
 openssl req -new -x509 -days 365 -subj "/CN=$AZURE_DEPLOYMENT_NAME/O=Web Framework Benchmarks" -key "$AZURE_KEY_FILE" -out "$AZURE_PEM_FILE" || fail "Error creating PEM file."
@@ -66,9 +67,9 @@ $AZURE_COMMAND vm create $WINDOWS_SERVER_VM_NAME $LATEST_WINDOWS_IMAGE Administr
 
 # Create SQL Server VM.
 echo "SQL Server image:"
+SQL_SERVER_IMAGE="fb83b3509582419d99629ce476bcb5c8__Microsoft-SQL-Server-2012SP1-CU4-11.0.3368.0-Standard-ENU-Win2012"
 echo $SQL_SERVER_IMAGE
 echo "Creating SQL Server VM: $SQL_SERVER_VM_NAME"
-SQL_SERVER_IMAGE="fb83b3509582419d99629ce476bcb5c8__Microsoft-SQL-Server-2012SP1-CU4-11.0.3368.0-Standard-ENU-Win2012"
 $AZURE_COMMAND vm create $SQL_SERVER_VM_NAME $SQL_SERVER_IMAGE Administrator $AZURE_WINDOWS_PASSWORD --vm-name $SQL_SERVER_VM_NAME --vm-size $AZURE_DEPLOYMENT_VM_SIZE --virtual-network-name $AZURE_DEPLOYMENT_NAME --rdp --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual machine $SQL_SERVER_VM_NAME."
 
 echo ""

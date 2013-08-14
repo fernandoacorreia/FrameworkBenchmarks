@@ -23,16 +23,18 @@
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
-
-echo "******************************************************************************"
-echo "Step 6: Windows server setup"
-echo "******************************************************************************"
+set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
 
+information "******************************************************************************"
+information "Step 6: Windows server setup"
+information "******************************************************************************"
+
 # Install prerequisites on Linux client.
 echo ""
+echo "The Linux client is used as an intermediary for the Windows server setup."
 run_remote_script "Installing prerequisites on Linux client." "$AZURE_LINUX_USER" "$CLIENT_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "wsr-step-1.sh" || fail "Error running script."
 
 # Setup Windows server from Linux client.

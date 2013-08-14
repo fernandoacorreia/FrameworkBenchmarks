@@ -9,13 +9,14 @@
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
-
-echo "******************************************************************************"
-echo "Step 2: Configure Windows Azure command line tools"
-echo "******************************************************************************"
+set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
+
+information "******************************************************************************"
+information "Step 2: Configure Windows Azure command line tools"
+information "******************************************************************************"
 
 # Create directory for Windows Azure command line tools configuration.
 AZURE_HOME=$(eval echo ~${SUDO_USER})/.azure

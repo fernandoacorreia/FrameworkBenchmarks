@@ -4,6 +4,7 @@
 #
 # Step 2: Install software on Linux server.
 #
+set -o nounset -o errexit
 echo "Host:" `hostname`
 echo "Step 2: Install software on Linux server"
 

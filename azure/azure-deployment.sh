@@ -16,12 +16,13 @@
 # wouldn't seem necessary or usual in a pure Linux environment.
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
-
-echo "Deploying Web Framework Benchmarks to Windows Azure..."
-echo ""
+set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
+
+information "Deploying Web Framework Benchmarks to Windows Azure..."
+echo ""
 
 bash ./azure-deployment-step1.sh || fail "Step 1 failed."
 bash ./azure-deployment-step2.sh || fail "Step 2 failed."

@@ -6,13 +6,14 @@
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
-
-echo "******************************************************************************"
-echo "Step 5: Linux server setup"
-echo "******************************************************************************"
+set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
+
+information "******************************************************************************"
+information "Step 5: Linux server setup"
+information "******************************************************************************"
 
 # Get Linux server IP.
 echo "Retrieving $LINUX_SERVER_VM_NAME IP:"

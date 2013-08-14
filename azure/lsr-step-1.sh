@@ -4,6 +4,7 @@
 #
 # Step 1: Install prerequisites.
 #
+set -o nounset -o errexit
 echo "Host:" `hostname`
 echo "Step 1: Install prerequisites"
 

@@ -4,10 +4,11 @@
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
+set -o nounset -o errexit
 
 # Variables used in several steps:
 export AZURE_LINUX_USER="ubuntu"
-export AZURE_SSH_DIR=$(eval echo ~${SUDO_USER})/.ssh
+export AZURE_SSH_DIR="~/.ssh"
 export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
 export AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
 export AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
@@ -19,11 +20,35 @@ export SQL_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}sql"
 export AZURE_LOG_DIR="/var/log/${AZURE_DEPLOYMENT_NAME}"
 export AZURE_LINUX_CONFIGURATION_FILE="/tmp/benchmark-configuration.sh"
 
+# Color displays.
+NORMAL=$(tput sgr0)
+BOLDCYAN=$(tput setaf 6; tput bold)
+BOLDYELLOW=$(tput setaf 3; tput bold)
+BOLDRED=$(tput setaf 1; tput bold)
+
+function cyan() {
+    echo -e "$BOLDCYAN$*$NORMAL"
+}
+
+function red() {
+    echo -e "$BOLDRED$*$NORMAL"
+}
+
+function yellow() {
+    echo -e "$BOLDYELLOW$*$NORMAL"
+}
+
+# Displays informative message.
+function information() { cyan "$@"; }
+
+# Displays warning message.
+function warning() { yellow "$@"; }
+
 # Displays error message.
-error() { echo "ERROR: $@" 1>&2; }
+function error() { red "ERROR: $@" 1>&2; }
 
 # Displays error message and aborts.
-fail() { [ $# -eq 0 ] || error "$@"; exit 1; }
+function fail() { [ $# -eq 0 ] || error "$@"; exit 1; }
 
 # Function used to invoke Windows batch files.
 # It removes cygwinisms from the PATH and the environment first
@@ -31,7 +56,7 @@ fail() { [ $# -eq 0 ] || error "$@"; exit 1; }
 # It also seems to fix the space problem.
 # Author: Igor Pechtchanski
 # http://cygwin.com/ml/cygwin/2004-09/msg00150.html
-cywgin_cmd () 
+function cywgin_cmd () 
 { 
     ( local c="`cygpath -w \"$1\"`";
     shift;
@@ -55,7 +80,7 @@ cywgin_cmd ()
     unset BASH_ENV COLORTERM CYGWIN DISPLAY HISTCONTROL MAKE_MODE;
     unset MANPATH PKG_CONFIG_PATH PS1 PWD SHLVL TERM USER _;
     unset CVS CVSROOT CVS_RSH GEN_HOME GROOVY_HOME TOMCAT_DIR;
-    eval $cmd /c "$c" $args || { status=$?; error "Status code $status executing $cmd /c \"$c\" $args"; return $status; }
+    eval $cmd /c "$c" $args
     )
 } # TODO azure.cmd is not returning status code from node
 

@@ -4,6 +4,8 @@
 #
 # Step 3: First-time setup.
 #
+set -o nounset -o errexit
+
 function first_time_setup {
     # rvm seems to abort script unless it's called within a function
     echo "Host:" `hostname`
@@ -24,6 +26,15 @@ function first_time_setup {
     cd ..
     sudo apt-get remove --purge openjdk-6-jre openjdk-6-jre-headless -qq
     mongo --host $BENCHMARK_CLIENT_IP < config/create.js || { echo "Error configuring mongo."; exit 1; }
+    
+# TODO Error
+# connecting to: 10.32.0.12:27017/test
+# Tue Aug 13 22:51:02 Error: couldn't connect to server 10.32.0.12:27017 shell/mongo.js:86
+# exception: connect failed
+# Executing later:
+# connecting to: 10.32.0.12:27017/test
+# switched to db hello_world
+
     echo ""
     echo "End of step 3"
 }

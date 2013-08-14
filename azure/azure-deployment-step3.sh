@@ -10,13 +10,14 @@
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
-
-echo "******************************************************************************"
-echo "Step 3: Create common resources"
-echo "******************************************************************************"
+set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
+
+information "******************************************************************************"
+information "Step 3: Create common resources"
+information "******************************************************************************"
 
 # Create affinity group.
 echo "Creating affinity group $AZURE_DEPLOYMENT_NAME at $AZURE_DEPLOYMENT_LOCATION"

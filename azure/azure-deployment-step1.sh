@@ -9,13 +9,14 @@
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
-
-echo "******************************************************************************"
-echo "Step 1: Validate configuration"
-echo "******************************************************************************"
+set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
+
+information "******************************************************************************"
+information "Step 1: Validate configuration"
+information "******************************************************************************"
 
 # Validate AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION.
 if [ -z "$AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION" ]; then fail "AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION is not defined."; fi

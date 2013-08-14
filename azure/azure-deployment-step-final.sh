@@ -8,13 +8,14 @@
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
-
-echo "******************************************************************************"
-echo "Final step: Cleanup and instructions"
-echo "******************************************************************************"
+set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
+
+information "******************************************************************************"
+information "Final step: Cleanup and instructions"
+information "******************************************************************************"
 
 echo "Cleaning up temporary files."
 [ -f "$AZURE_LINUX_CONFIGURATION_KEY_FILE" ] && rm $AZURE_LINUX_CONFIGURATION_KEY_FILE

@@ -10,6 +10,7 @@
 #
 set -o igncr  # for Cygwin on Windows
 export SHELLOPTS
+set -o nounset -o errexit
 
 # Full pathname of the Windows Azure account publish settings file.
 # This file can be downloaded with the "azure account download" command.
