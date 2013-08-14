@@ -14,6 +14,7 @@ source ~/bin/benchmark-configuration.sh
 echo ""
 echo "Running a smoke test"
 echo "revel (Go/MySQL), cpoll-pool(C++/Pg), rest-express(Java/Mongo)"
+cd ~/FrameworkBenchmarks
 ./run-tests.py -s "$BENCHMARK_SERVER_IP" -c "$BENCHMARK_CLIENT_IP" -i "$BENCHMARK_KEY_PATH" --max-threads 1 --name smoketest --test revel cpoll_cppsp-postgres-raw restexpress-mongodb --type all -m verify
 
 # TODO Error with Pg
