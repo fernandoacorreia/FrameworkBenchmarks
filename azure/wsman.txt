@@ -50,12 +50,14 @@ curl http://10.32.0.20:5985/wsman --insecure --user Administrator:Pass0#1827 --r
 
 *** WSL ***
 
+apt-get install curl gnupg libxml2-utils xsltproc -qq
 git clone git://linux.dell.com/wsl.git
+or "wsl" from precise-backports: http://packages.ubuntu.com/precise-backports/wsl
+
 http://en.community.dell.com/techcenter/extras/m/white_papers/20168537.aspx
+http://linux.die.net/man/1/wsl
 http://en.community.dell.com/techcenter/b/techcenter/archive/2012/08/29/a-lightweight-wsman-client-for-ubuntu-wsl.aspx
 http://en.community.dell.com/techcenter/systems-management/w/wiki/3981.wsl-wsman-shell-commandline-client.aspx
-http://linux.die.net/man/1/wsl
-http://packages.ubuntu.com/precise-backports/wsl
 
 
 # cat .wslrun
@@ -80,6 +82,10 @@ export WSUSER="Administrator"
     </wsmid:IdentifyResponse>
   </s:Body>
 </s:Envelope>
+
+# WSENDPOINT=192.168.7.31 WSUSER=admin WSPASS=*** wsl identify check
+
+KEEPHISTORY=""
 
 
 *** open wsman ***
@@ -106,3 +112,13 @@ https://github.com/Openwsman/openwsman/wiki/openwsman-command-line-client
 *** openwsman ruby client ***
 
 http://users.suse.com/~kkaempf/openwsman/
+
+
+*** WS-Management Protocol ***
+
+http://msdn.microsoft.com/en-us/library/aa384291(VS.85).aspx
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa384470(v=vs.85).aspx
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa384426(v=vs.85).aspx
+http://www.dmtf.org/sites/default/files/standards/documents/DSP0226_1.0.0.pdf
+http://technet.microsoft.com/en-us/library/dd819505.aspx
+http://blogs.technet.com/b/jonjor/archive/2009/01/09/winrm-windows-remote-management-troubleshooting.aspx
