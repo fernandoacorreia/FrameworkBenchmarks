@@ -27,6 +27,17 @@ echo "revel (Go/MySQL), cpoll-pool(C++/Pg), rest-express(Java/Mongo)"
 # /home/ubuntu/FrameworkBenchmarks/cpoll_cppsp/cppsp_0.2/run_application: line 5:  5489 Killed                  ./cppsp_standalone
 # -f -l 0.0.0.0:16969 -c -fPIC -c -I"$(pwd)"/include -c -pthread -c -Ofast -c -march=native -c "$(pwd)"/cpoll.o -c "$(pwd)"/cppsp.o -t "$num_cpus" -r "$@"
 
+# TODO: Getting errors
+# bash: cpu0/cpufreq/scaling_governor: No such file or directory
+# bash: cpu1/cpufreq/scaling_governor: No such file or directory
+# bash: cpufreq/cpufreq/scaling_governor: No such file or directory
+# bash: cpuidle/cpufreq/scaling_governor: No such file or directory
+# 
+# Investigate possible solutions
+# sudo apt-get install cpufrequtils -qq
+# http://www.pantz.org/software/cpufreq/usingcpufreqonlinux.html
+# http://forums.linuxmint.com/viewtopic.php?f=90&t=99383
+
 echo ""
 echo "Restarting Linux server"
 sudo shutdown -r now

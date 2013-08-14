@@ -1,0 +1,108 @@
+TODO: MANAGE WINDOWS SERVER
+
+NOTES
+
+
+*** SERVER CONFIGURATION ***
+
+It's better if we don't need to set this:
+
+winrm set winrm/config/client/auth @{Basic="true"}
+winrm set winrm/config/service/auth @{Basic="true"}
+winrm set winrm/config/service @{AllowUnencrypted="true"}
+
+https://github.com/WinRb/WinRM/issues/29
+http://www.myotherpcisacloud.com/post/2012/01/26/Monitoring-with-Windows-Remote-Management-(WinRM)-and-Powershell-Part-I.aspx
+http://technet.microsoft.com/en-us/library/hh849873.aspx
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa384295(v=vs.85).aspx
+http://richardspowershellblog.wordpress.com/2011/12/10/wmi-wsman-cim-and-authentication-pt-ii/
+
+
+*** WSMAN ****
+
+http://en.community.dell.com/techcenter/b/techcenter/archive/2012/08/03/wsmancli-package-for-ubuntu.aspx
+http://openwsman.2324880.n4.nabble.com/Syntax-of-wsman-client-td947.html
+
+wsman identify -h 10.32.0.20 -u "Administrator" -p "Pass0#1827" -P 5985 -y basic
+
+
+*** CURL ***
+
+curl http://10.32.0.20:5985/wsman --insecure --user Administrator:Pass0#1827 --retry 1 --connect-timeout 180 -H 'Content-Type: application/soap+xml;charset=utf-8'  -d @./request-1.xml -o ./response-1.xml
+
+# cat request-1.xml
+<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:wsmid="http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd">
+  <s:Header/>
+  <s:Body>
+    <wsmid:Identify/>
+  </s:Body>
+</s:Envelope>
+
+# curl http://10.32.0.20:5985/wsman --insecure --user Administrator:Pass0#1827 --retry 1 --connect-ti meout 180 -H 'Content-Type: application/soap+xml;charset=utf-8'  -d @./request-1.xml -o ./response-1.xml
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  1016  100   787  100   229  10620   3090 --:--:-- --:--:-- --:--:-- 12693
+
+# cat response-1.xml
+<s:Envelope xml:lang="en-US" xmlns:s="http://www.w3.org/2003/05/soap-envelope"><s:Header></s:Header><s:Body><wsmid:IdentifyResponse xmlns:wsmid="http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd"><wsmid:ProtocolVersion>http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd</wsmid:ProtocolVersion><wsmid:ProductVendor>Microsoft Corporation</wsmid:ProductVendor><wsmid:ProductVersion>OS: 6.2.9200 SP: 0.0 Stack: 3.0</wsmid:ProductVersion><wsmid:SecurityProfiles><wsmid:SecurityProfileName>http://schemas.dmtf.org/wbem/wsman/1/wsman/secprofile/http/basic</wsmid:SecurityProfileName><wsmid:SecurityProfileName>http://schemas.dmtf.org/wbem/wsman/1/wsman/secprofile/http/spnego-kerberos</wsmid:SecurityProfileName></wsmid:SecurityProfiles></wsmid:IdentifyResponse></s:Body></s:Envelope>root@wfb08131740cli:/tmp/x#
+
+
+*** WSL ***
+
+git clone git://linux.dell.com/wsl.git
+http://en.community.dell.com/techcenter/extras/m/white_papers/20168537.aspx
+http://en.community.dell.com/techcenter/b/techcenter/archive/2012/08/29/a-lightweight-wsman-client-for-ubuntu-wsl.aspx
+http://en.community.dell.com/techcenter/systems-management/w/wiki/3981.wsl-wsman-shell-commandline-client.aspx
+http://linux.die.net/man/1/wsl
+http://packages.ubuntu.com/precise-backports/wsl
+
+
+# cat .wslrun
+export WSENDPOINT="10.32.0.20:5985"
+export WSNOSSL=1
+export WSPASS="Pass0#1827"
+export WSUSER="Administrator"
+
+# wsl/wslid check
+<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xml:lang="en-US">
+  <s:Header/>
+  <s:Body>
+    <wsmid:IdentifyResponse xmlns:wsmid="http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd">
+      <wsmid:ProtocolVersion>http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd</wsmid:ProtocolVersion>
+      <wsmid:ProductVendor>Microsoft Corporation</wsmid:ProductVendor>
+      <wsmid:ProductVersion>OS: 6.2.9200 SP: 0.0 Stack: 3.0</wsmid:ProductVersion>
+      <wsmid:SecurityProfiles>
+        <wsmid:SecurityProfileName>http://schemas.dmtf.org/wbem/wsman/1/wsman/secprofile/http/basic</wsmid:SecurityProfileName>
+        <wsmid:SecurityProfileName>http://schemas.dmtf.org/wbem/wsman/1/wsman/secprofile/http/spnego-kerberos</wsmid:SecurityProfileName>
+      </wsmid:SecurityProfiles>
+    </wsmid:IdentifyResponse>
+  </s:Body>
+</s:Envelope>
+
+
+*** open wsman ***
+
+http://sourceforge.net/projects/openwsman/
+
+
+*** WinRb/WinRM ***
+
+https://github.com/WinRb/WinRM
+http://distributed-frostbite.blogspot.com.br/2010/08/managing-windows-with-ruby-part-1-or.html
+
+
+*** openwsman ***
+
+http://openwsman.github.io/
+https://launchpad.net/ubuntu/+source/openwsman
+http://packages.ubuntu.com/source/lucid/openwsman
+http://packages.ubuntu.com/lucid/openwsman
+http://packages.ubuntu.com/search?suite=precise&keywords=openwsman
+https://github.com/Openwsman/openwsman/wiki/openwsman-command-line-client
+
+
+*** openwsman ruby client ***
+
+http://users.suse.com/~kkaempf/openwsman/

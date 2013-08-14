@@ -55,3 +55,4 @@ export AZURE_DEPLOYMENT_VM_SIZE="large"
 # On Windows: export AZURE_COMMAND="cywgin_cmd azure.cmd"
 # On Linux/Mac: export AZURE_COMMAND="azure"
 export AZURE_COMMAND="cywgin_cmd azure.cmd"
+# TODO This can be set at runtime in azure-deployment-common.sh
