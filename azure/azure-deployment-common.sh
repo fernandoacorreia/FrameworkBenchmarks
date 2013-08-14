@@ -8,7 +8,7 @@ set -o nounset -o errexit
 
 # Variables used in several steps:
 export AZURE_LINUX_USER="ubuntu"
-export AZURE_SSH_DIR="~/.ssh"
+export AZURE_SSH_DIR="$HOME/.ssh"
 export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
 export AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
 export AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
@@ -61,14 +61,15 @@ function cywgin_cmd ()
     ( local c="`cygpath -w \"$1\"`";
     shift;
     local cmd=`cygpath -u $COMSPEC`;
+    local args="";
     while [ $# != 0 ]; do
         if [ -f "$1" ]; then
-            local args="$args '`cygpath -w $1`'";
+            args="$args '`cygpath -w $1`'";
         else
             if [ -d "$1" ]; then
-                local args="$args '`cygpath -w $1 | sed 's@\\\\\$@@'`'";
+                args="$args '`cygpath -w $1 | sed 's@\\\\\$@@'`'";
             else
-                local args="$args '$1'";
+                args="$args '$1'";
             fi;
         fi;
         shift;

@@ -19,7 +19,7 @@ information "Step 2: Configure Windows Azure command line tools"
 information "******************************************************************************"
 
 # Create directory for Windows Azure command line tools configuration.
-AZURE_HOME=$(eval echo ~${SUDO_USER})/.azure
+AZURE_HOME="$HOME/.azure"
 echo "Creating Windows Azure configuration directory at $AZURE_HOME"
 mkdir -p ${AZURE_HOME} || fail "Error creating directory $AZURE_HOME."
 
