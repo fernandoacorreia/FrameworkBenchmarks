@@ -11,7 +11,7 @@ function first_time_setup {
     echo "Host:" `hostname`
     echo "Step 3: First-time setup"
     export DEBIAN_FRONTEND=noninteractive
-    source ~/.bash_profile
+    source ~/.bash_profile # TODO: redundant?
     source ~/bin/benchmark-configuration.sh
     ulimit -n 8192
     cd ~/FrameworkBenchmarks

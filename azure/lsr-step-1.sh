@@ -31,6 +31,11 @@ echo "Upgrading packages"
 sudo apt-get upgrade -qq
 
 echo ""
+echo "Installing packages that are not automatically installed by run-tests.py"
+# https://github.com/TechEmpower/FrameworkBenchmarks/issues/417
+sudo apt-get install mercurial -qq
+
+echo ""
 echo "Installing git"
 sudo apt-get install git -qq
 
