@@ -4,8 +4,6 @@
 #
 # Step 3: First-time setup.
 #
-set -o nounset -o errexit
-
 function first_time_setup {
     # rvm seems to abort script unless it's called within a function
     echo "Host:" `hostname`
