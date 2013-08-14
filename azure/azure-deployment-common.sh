@@ -105,7 +105,7 @@ function get_vm_ip {
         json=$vm_properties
         prop='InstanceStatus'
         local vm_status=`jsonval`
-        if [[ "$vm_status" != "ReadyRole" ]]; then sleep 10s; fi
+        if [[ "$vm_status" != "ReadyRole" ]]; then { error "$vm_name status is '$vm_status'. Retrying in 10s..."; sleep 10s; } fi
     done
     prop='IPAddress'
     local ip_address=`jsonval`
