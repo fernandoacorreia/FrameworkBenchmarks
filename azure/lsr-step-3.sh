@@ -10,6 +10,7 @@ function additional_setup {
     echo "Step 3: Additional setup"
     export DEBIAN_FRONTEND=noninteractive
     source ~/bin/benchmark-configuration.sh
+    source ~/.bash_profile
     ulimit -n 8192
     cd ~/FrameworkBenchmarks/installs/jruby-rack  || { echo "ERROR on 'cd ~/FrameworkBenchmarks/installs/jruby-rack'"; exit 1; }
     rvm jruby-1.7.4 do jruby -S bundle exec rake clean gem SKIP_SPECS=true  || { echo "ERROR on 'rvm jruby-1.7.4 do jruby -S bundle exec rake clean gem SKIP_SPECS=true'"; exit 1; }
