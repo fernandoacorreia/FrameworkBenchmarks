@@ -8,8 +8,6 @@
 # be shared by all VMs, including affinity group, storage account and
 # virtual network.
 #
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh

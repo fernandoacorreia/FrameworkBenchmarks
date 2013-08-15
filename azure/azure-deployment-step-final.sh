@@ -6,8 +6,6 @@
 #
 # This script prints instructions after the deployment has completed.
 #
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh

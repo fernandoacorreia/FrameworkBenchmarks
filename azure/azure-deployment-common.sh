@@ -2,8 +2,6 @@
 #
 # Bash script defining common functions used by the Windows Azure deployment scripts.
 #
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 # Variables used in several steps:

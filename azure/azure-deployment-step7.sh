@@ -21,8 +21,6 @@
 # execute the remote scripts then we're done.
 # A service called winexesvc is installed on the Windows server, but we stop it after deployment.
 #
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh

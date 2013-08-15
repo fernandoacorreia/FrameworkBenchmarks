@@ -4,8 +4,6 @@
 #
 # Step 6: Linux server and client additional setup.
 #
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh

@@ -13,8 +13,6 @@
 # The size of the VMs to be created is defined in the configuration.
 # The virtual machines are created with a default OS disk and without any additional data disks.
 # For more information refer to https://www.windowsazure.com/en-us/documentation/services/virtual-machines/
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh

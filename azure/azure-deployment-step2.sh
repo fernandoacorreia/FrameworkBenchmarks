@@ -7,8 +7,6 @@
 # This scripts configures the Windows Azure command line tools for the current user
 # with the account and subscription defined in the configuration.
 #
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh

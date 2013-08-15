@@ -8,8 +8,6 @@
 # - Copy this file to a new file named "azure-deployment-configuration.sh" on the same directory.
 # - Configure as documented below.
 #
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 # Full pathname of the Windows Azure account publish settings file.

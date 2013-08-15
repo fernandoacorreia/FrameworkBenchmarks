@@ -7,8 +7,6 @@
 # This scripts does some basic validation of the configuration parameters to avoid
 # starting to create some resources and abort later because of a misconfiguration.
 #
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh

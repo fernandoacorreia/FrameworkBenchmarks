@@ -14,8 +14,6 @@
 # Note: These scripts are designed to run both on Windows (under Cygwin) and
 # on Linux and Mac. To achieve that, they have to use some workarounds that
 # wouldn't seem necessary or usual in a pure Linux environment.
-set -o igncr  # for Cygwin on Windows
-export SHELLOPTS
 set -o nounset -o errexit
 
 source ./azure-deployment-configuration.sh
@@ -24,10 +22,10 @@ source ./azure-deployment-common.sh
 information "Deploying Web Framework Benchmarks to Windows Azure..."
 echo ""
 
-bash ./azure-deployment-step1.sh || fail "Step 1 failed."
-bash ./azure-deployment-step2.sh || fail "Step 2 failed."
-bash ./azure-deployment-step3.sh || fail "Step 3 failed."
-bash ./azure-deployment-step4.sh || fail "Step 4 failed."
-bash ./azure-deployment-step5.sh || fail "Step 5 failed."
-bash ./azure-deployment-step6.sh || fail "Step 6 failed."
-bash ./azure-deployment-step-final.sh || fail "Final step failed."
+source ./azure-deployment-step1.sh || fail "Step 1 failed."
+source ./azure-deployment-step2.sh || fail "Step 2 failed."
+source ./azure-deployment-step3.sh || fail "Step 3 failed."
+source ./azure-deployment-step4.sh || fail "Step 4 failed."
+source ./azure-deployment-step5.sh || fail "Step 5 failed."
+source ./azure-deployment-step6.sh || fail "Step 6 failed."
+source ./azure-deployment-step-final.sh || fail "Final step failed."
