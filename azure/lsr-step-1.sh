@@ -32,6 +32,7 @@ sudo apt-get upgrade -qq
 
 echo ""
 echo "Installing packages that are not automatically installed by run-tests.py"
+# TODO Remove when this issue is closed:
 # https://github.com/TechEmpower/FrameworkBenchmarks/issues/417
 sudo apt-get install mercurial -qq
 
