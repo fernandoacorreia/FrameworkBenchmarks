@@ -29,9 +29,9 @@ information "*******************************************************************
 
 # Additional setup.
 echo ""
-run_remote_script "Completing setup." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-3.sh" || fail "Error running script."
+run_remote_script "Completing setup." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-2.sh" || fail "Error running script."
 
 # Verify setup
-run_remote_script "Verifying setup." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-4.sh" || fail "Error running script."
+run_remote_script "Verifying setup." "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" "lsr-step-3.sh" || fail "Error running script."
 
 echo ""
