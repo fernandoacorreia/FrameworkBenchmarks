@@ -29,18 +29,18 @@ cat >$AZURE_LINUX_CONFIGURATION_FILE <<_EOF_
 #!/bin/bash
 export BENCHMARK_SERVER_IP=$LINUX_SERVER_IP
 export BENCHMARK_CLIENT_IP=$CLIENT_IP
-export BENCHMARK_KEY_PATH=~/.ssh/$AZURE_KEY_NAME
+export BENCHMARK_KEY_PATH=~/$AZURE_KEY_NAME
 export BENCHMARK_REPOSITORY=$BENCHMARK_REPOSITORY
 export BENCHMARK_BRANCH=$BENCHMARK_BRANCH
 _EOF_
 
 # Upload Linux host configuration script.
 echo ""
-upload_file "$AZURE_LINUX_CONFIGURATION_FILE" "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "~/bin" "$AZURE_KEY_FILE"
+upload_file "$AZURE_LINUX_CONFIGURATION_FILE" "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "~" "$AZURE_KEY_FILE"
 
 # Copy key to server.
 echo ""
-upload_file "$AZURE_KEY_FILE" "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "~/.ssh" "$AZURE_KEY_FILE"
+upload_file "$AZURE_KEY_FILE" "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "~" "$AZURE_KEY_FILE"
 
 # Install software.
 echo ""

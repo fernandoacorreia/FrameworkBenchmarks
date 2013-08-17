@@ -11,22 +11,18 @@ echo "Step 1: Install software on Linux server"
 export DEBIAN_FRONTEND=noninteractive
 
 echo ""
-source ~/bin/benchmark-configuration.sh
+source ~/benchmark-configuration.sh
 if [ -z "$BENCHMARK_SERVER_IP" ]; then echo "BENCHMARK_SERVER_IP is not defined."; exit 1; fi
 echo "BENCHMARK_SERVER_IP: $BENCHMARK_SERVER_IP"
 if [ -z "$BENCHMARK_CLIENT_IP" ]; then echo "BENCHMARK_CLIENT_IP is not defined."; exit 1; fi
 echo "BENCHMARK_CLIENT_IP: $BENCHMARK_CLIENT_IP"
 if [ -z "$BENCHMARK_KEY_PATH" ]; then echo "BENCHMARK_KEY_PATH is not defined."; exit 1; fi
 echo "BENCHMARK_KEY_PATH: $BENCHMARK_KEY_PATH"
+chmod 600 "$BENCHMARK_KEY_PATH" || { echo "Error setting key file permissions."; exit 1; }
 if [ -z "$BENCHMARK_REPOSITORY" ]; then echo "BENCHMARK_REPOSITORY is not defined."; exit 1; fi
 echo "BENCHMARK_REPOSITORY: $BENCHMARK_REPOSITORY"
 if [ -z "$BENCHMARK_BRANCH" ]; then echo "BENCHMARK_BRANCH is not defined."; exit 1; fi
 echo "BENCHMARK_BRANCH: $BENCHMARK_BRANCH"
-
-echo ""
-echo "Creating required directories"
-mkdir -p ~/.ssh
-mkdir -p ~/bin
 
 echo ""
 echo "Configuring firewall"

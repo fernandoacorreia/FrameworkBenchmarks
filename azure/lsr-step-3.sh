@@ -9,7 +9,7 @@ echo "Host:" `hostname`
 echo "Step 3: Verify setup."
 
 export DEBIAN_FRONTEND=noninteractive
-source ~/bin/benchmark-configuration.sh
+source ~/benchmark-configuration.sh
 
 echo ""
 echo "Running a smoke test..."

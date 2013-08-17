@@ -9,7 +9,7 @@ function additional_setup {
     echo "Host:" `hostname`
     echo "Step 2: Additional setup"
     export DEBIAN_FRONTEND=noninteractive
-    source ~/bin/benchmark-configuration.sh
+    source ~/benchmark-configuration.sh
     source ~/.bash_profile
     ulimit -n 8192
     cd ~/FrameworkBenchmarks/installs/jruby-rack  || { echo "ERROR on 'cd ~/FrameworkBenchmarks/installs/jruby-rack'"; exit 1; }
