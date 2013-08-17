@@ -4,49 +4,32 @@
 #
 set -o nounset -o errexit
 
-# Variables used in several steps:
-export AZURE_LINUX_USER="ubuntu"
-export AZURE_SSH_DIR="$HOME/.ssh"
-export AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
-export AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
-export AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
-export AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
-export CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
-export LINUX_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}lsr"
-export WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"
-export SQL_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}sql"
-export AZURE_LOG_DIR="/var/log/${AZURE_DEPLOYMENT_NAME}"
-export AZURE_LINUX_CONFIGURATION_FILE="/tmp/benchmark-configuration.sh"
+source ./azure-deployment-configuration.sh
 
-# Color displays.
-NORMAL=$(tput sgr0)
-BOLDCYAN=$(tput setaf 6; tput bold)
-BOLDYELLOW=$(tput setaf 3; tput bold)
-BOLDRED=$(tput setaf 1; tput bold)
-
-function cyan() {
+# Color display functions.
+function cyan {
     echo -e "$BOLDCYAN$*$NORMAL"
 }
 
-function red() {
+function red {
     echo -e "$BOLDRED$*$NORMAL"
 }
 
-function yellow() {
+function yellow {
     echo -e "$BOLDYELLOW$*$NORMAL"
 }
 
 # Displays informative message.
-function information() { cyan "$@"; }
+function information { cyan "$@"; }
 
 # Displays warning message.
-function warning() { yellow "$@"; }
+function warning { yellow "$@"; }
 
 # Displays error message.
-function error() { red "ERROR: $@" 1>&2; }
+function error { red "ERROR: $@" 1>&2; }
 
 # Displays error message and aborts.
-function fail() { [ $# -eq 0 ] || error "$@"; exit 1; }
+function fail { [ $# -eq 0 ] || error "$@"; exit 1; }
 
 # Function used to invoke Windows batch files.
 # It removes cygwinisms from the PATH and the environment first
@@ -54,8 +37,7 @@ function fail() { [ $# -eq 0 ] || error "$@"; exit 1; }
 # It also seems to fix the space problem.
 # Author: Igor Pechtchanski
 # http://cygwin.com/ml/cygwin/2004-09/msg00150.html
-function cywgin_cmd () 
-{ 
+function cywgin_cmd { 
     ( local c="`cygpath -w \"$1\"`";
     shift;
     local cmd=`cygpath -u $COMSPEC`;
@@ -143,3 +125,63 @@ function upload_file {
     echo "Uploading file $file_to_upload to $remote_host:$target_directory"
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i "$private_key_file" "$file_to_upload" "$remote_user@$remote_host:$target_directory" || fail "Error uploading file."
 }
+
+# Check configuration.
+function check_configuration {
+    # Validate AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION.
+    if [ -z "$AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION" ]; then fail "AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION is not defined."; fi
+    if [ ! -f $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION ]; then fail "File not found: $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION"; fi
+
+    # Validate AZURE_DEPLOYMENT_SUBSCRIPTION.
+    if [ -z "$AZURE_DEPLOYMENT_SUBSCRIPTION" ]; then fail "AZURE_DEPLOYMENT_SUBSCRIPTION is not defined."; fi
+
+    # Validate AZURE_DEPLOYMENT_LOCATION.
+    if [ -z "$AZURE_DEPLOYMENT_LOCATION" ]; then fail "AZURE_DEPLOYMENT_LOCATION is not defined."; fi
+
+    # Validate AZURE_DEPLOYMENT_NAME.
+    if [ -z "$AZURE_DEPLOYMENT_NAME" ]; then fail "AZURE_DEPLOYMENT_NAME is not defined."; fi
+    if [ ${#AZURE_DEPLOYMENT_NAME} -gt 12 ]; then fail "AZURE_DEPLOYMENT_NAME must be at most 12 characters long."; fi
+
+    # Validate $AZURE_WINDOWS_PASSWORD.
+    if [ -z "$AZURE_WINDOWS_PASSWORD" ]; then fail "AZURE_WINDOWS_PASSWORD is not defined."; fi
+    if [ ${#AZURE_WINDOWS_PASSWORD} -lt 10 ]; then fail "AZURE_WINDOWS_PASSWORD must be at least 10 characters long."; fi
+
+    # Validate AZURE_DEPLOYMENT_VM_SIZE.
+    if [ -z "$AZURE_DEPLOYMENT_VM_SIZE" ]; then fail "AZURE_DEPLOYMENT_VM_SIZE is not defined."; fi
+
+    # Validate AZURE_COMMAND.
+    if [ -z "$AZURE_COMMAND" ]; then fail "AZURE_COMMAND is not defined."; fi
+}
+
+# Set variables used in several steps.
+AZURE_LINUX_USER="ubuntu"
+AZURE_SSH_DIR="$HOME/.ssh"
+AZURE_KEY_NAME="id_rsa-${AZURE_DEPLOYMENT_NAME}"
+AZURE_KEY_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}"
+AZURE_PEM_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.x509.pub.pem"
+AZURE_CER_FILE="${AZURE_SSH_DIR}/${AZURE_KEY_NAME}.cer"
+CLIENT_VM_NAME="${AZURE_DEPLOYMENT_NAME}cli"
+LINUX_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}lsr"
+WINDOWS_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}wsr"
+SQL_SERVER_VM_NAME="${AZURE_DEPLOYMENT_NAME}sql"
+AZURE_LOG_DIR="/var/log/${AZURE_DEPLOYMENT_NAME}"
+AZURE_LINUX_CONFIGURATION_FILE="/tmp/benchmark-configuration.sh"
+BENCHMARK_REPOSITORY=${BENCHMARK_REPOSITORY:-"https://github.com/TechEmpower/FrameworkBenchmarks.git"}
+BENCHMARK_BRANCH=${BENCHMARK_BRANCH:-"master"}
+
+# Under CYGWIN this script uses a helper function to call the Windows Azure command line program.
+if [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ]; then
+    AZURE_COMMAND="cywgin_cmd azure.cmd"
+else
+    AZURE_COMMAND="azure"
+fi
+
+# Set variables used for color displays.
+NORMAL=$(tput sgr0)
+BOLDCYAN=$(tput setaf 6; tput bold)
+BOLDYELLOW=$(tput setaf 3; tput bold)
+BOLDRED=$(tput setaf 1; tput bold)
+
+# Verify configuration to avoid starting to create some resources
+# and abort later because of a misconfiguration.
+check_configuration

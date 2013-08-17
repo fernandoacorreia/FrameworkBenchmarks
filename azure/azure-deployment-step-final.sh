@@ -8,7 +8,6 @@
 #
 set -o nounset -o errexit
 
-source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
 
 information "******************************************************************************"

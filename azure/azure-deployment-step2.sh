@@ -2,31 +2,30 @@
 #
 # Bash script to deploy Web Framework Benchmarks on Windows Azure.
 #
-# Step 2: Configure Windows Azure command line tools.
+# Step 2: Create common resources.
 #
-# This scripts configures the Windows Azure command line tools for the current user
-# with the account and subscription defined in the configuration.
+# This script creates the resources on the Windows Azure subscription which will
+# be shared by all VMs, including affinity group, storage account and
+# virtual network.
 #
 set -o nounset -o errexit
 
-source ./azure-deployment-configuration.sh
 source ./azure-deployment-common.sh
 
 information "******************************************************************************"
-information "Step 2: Configure Windows Azure command line tools"
+information "Step 2: Create common resources"
 information "******************************************************************************"
 
-# Create directory for Windows Azure command line tools configuration.
-AZURE_HOME="$HOME/.azure"
-echo "Creating Windows Azure configuration directory at $AZURE_HOME"
-mkdir -p ${AZURE_HOME} || fail "Error creating directory $AZURE_HOME."
+# Create affinity group.
+echo "Creating affinity group $AZURE_DEPLOYMENT_NAME at $AZURE_DEPLOYMENT_LOCATION"
+$AZURE_COMMAND account affinity-group create $AZURE_DEPLOYMENT_NAME --location "$AZURE_DEPLOYMENT_LOCATION" || fail "Error creating affinity group $AZURE_DEPLOYMENT_NAME."
 
-# Import publish settings.
-echo "Importing publish settings at $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION"
-$AZURE_COMMAND account import $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION || fail "Error importing publish settings."
+# Create storage account.
+echo "Creating storage account $AZURE_DEPLOYMENT_NAME"
+$AZURE_COMMAND account storage create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating storage account $AZURE_DEPLOYMENT_NAME."
 
-# Set default subscription.
-echo "Setting default subscription to $AZURE_DEPLOYMENT_SUBSCRIPTION"
-$AZURE_COMMAND account set "$AZURE_DEPLOYMENT_SUBSCRIPTION" || fail "Error setting default subscription."
+# Create virtual network.
+echo "Creating virtual network $AZURE_DEPLOYMENT_NAME"
+$AZURE_COMMAND network vnet create $AZURE_DEPLOYMENT_NAME --affinity-group $AZURE_DEPLOYMENT_NAME || fail "Error creating virtual network $AZURE_DEPLOYMENT_NAME."
 
 echo ""
