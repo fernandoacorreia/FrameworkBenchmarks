@@ -13,18 +13,18 @@ set -o nounset -o errexit
 # Full pathname of the Windows Azure account publish settings file.
 # This file can be downloaded with the "azure account download" command.
 # For more information refer to http://www.windowsazure.com/en-us/manage/linux/other-resources/command-line-tools/
-export AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION=""
+AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION=""
 
 # Name of the Windows Azure subscription where the resources will be created.
 # Most Windows Azure accounts have a single subscription, but they can have many.
 # To list the available subscriptions use the command "azure account import publishsettingsfile.publishsettings"
 # where "publishsettingsfile.publishsettings" is the publish settings file downloaded previously.
-export AZURE_DEPLOYMENT_SUBSCRIPTION=""
+AZURE_DEPLOYMENT_SUBSCRIPTION=""
 
 # Region where the resources will be created.
 # To see a list of locations available for your subscription, execute the command "azure vm location list".
 # Some choices may be "East US", "West US", "North Europe", "West Europe", "East Asia", "Southeast Asia".
-export AZURE_DEPLOYMENT_LOCATION="East US"
+AZURE_DEPLOYMENT_LOCATION="East US"
 
 # Name of the deployment on Windows Azure.
 # It will be used as a prefix to name resources such as virtual machines.
@@ -36,21 +36,23 @@ export AZURE_DEPLOYMENT_LOCATION="East US"
 #    HH is the hour part of the current time with 2 digits
 #    MM is the minutes part of the current time with 2 digits
 #    For example, for a deployment created at 4:23 pm, Aug 9th 2013:
-#    export AZURE_DEPLOYMENT_NAME="wfb08090423"
-export AZURE_DEPLOYMENT_NAME=""
+#    AZURE_DEPLOYMENT_NAME="wfb08091623"
+AZURE_DEPLOYMENT_NAME=""
 
 # Password for Windows servers.
 # Must be at least 10 characters long with mixed case, digits and special symbols.
-export AZURE_WINDOWS_PASSWORD=""
+AZURE_WINDOWS_PASSWORD=""
 
 # Size of the virtual machines to be created.
 # Valid values include: extrasmall, small, medium, large, extralarge, a6, a7.
 # Warning: To use extralarge or bigger you may have to ask Windows Azure support
 # to increase the core limit of your subscription. It's initially limited to 20 cores.
-export AZURE_DEPLOYMENT_VM_SIZE="large"
+AZURE_DEPLOYMENT_VM_SIZE="large"
 
-# Windows Azure command line program.
-# On Windows: export AZURE_COMMAND="cywgin_cmd azure.cmd"
-# On Linux/Mac: export AZURE_COMMAND="azure"
-export AZURE_COMMAND="cywgin_cmd azure.cmd"
-# TODO This can be set at runtime in azure-deployment-common.sh
+# Benchmark repository to use.
+# Set this variable to use a custom repository. Its default value is the official repository.
+# BENCHMARK_REPOSITORY=""
+
+# Benchmark repository branch to use.
+# Set this variable to use a custom branch. Its default value  is "master".
+# BENCHMARK_BRANCH=""
