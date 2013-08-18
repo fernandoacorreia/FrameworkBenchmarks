@@ -37,6 +37,7 @@ _EOF_
 # Upload Linux host configuration script.
 echo ""
 upload_file "$AZURE_LINUX_CONFIGURATION_FILE" "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "~" "$AZURE_KEY_FILE"
+rm $AZURE_LINUX_CONFIGURATION_FILE  # Cleanup.
 
 # Copy key to server.
 echo ""

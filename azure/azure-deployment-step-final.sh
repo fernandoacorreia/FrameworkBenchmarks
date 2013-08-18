@@ -2,52 +2,58 @@
 #
 # Bash script to deploy Web Framework Benchmarks on Windows Azure.
 #
-# Final step: Cleanup and instructions.
+# Final step: Instructions.
 #
-# This script prints instructions after the deployment has completed.
+# This script saves and prints instructions after the deployment has completed.
 #
 set -o nounset -o errexit
 
 source ./azure-deployment-common.sh
 
 information "******************************************************************************"
-information "Final step: Cleanup and instructions"
+information "Final step: Instructions"
 information "******************************************************************************"
 
-echo "Cleaning up temporary files."
-[ -f "$AZURE_LINUX_CONFIGURATION_KEY_FILE" ] && rm $AZURE_LINUX_CONFIGURATION_KEY_FILE
-[ -f "$AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION" ] && rm $AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION
-
 echo ""
-echo "VMs deployed:"
-$AZURE_COMMAND vm list | grep -E "DNS Name|$AZURE_DEPLOYMENT_NAME" | cut -c 10-
+echo "Saving deployment instructions at $AZURE_DEPLOYMENT_INSTRUCTIONS_FILE"
+AZURE_VMS_DEPLOYED=`$AZURE_COMMAND vm list | grep -E "DNS Name|$AZURE_DEPLOYMENT_NAME" | cut -c 10-`
+cat >$AZURE_DEPLOYMENT_INSTRUCTIONS_FILE <<_EOF_
+Web Framework Benchmarks deployed from the $BENCHMARK_BRANCH branch of the repository at $BENCHMARK_REPOSITORY with the base name $AZURE_DEPLOYMENT_NAME at the $AZURE_DEPLOYMENT_LOCATION Windows Azure location under the subscription $AZURE_DEPLOYMENT_SUBSCRIPTION using $AZURE_DEPLOYMENT_VM_SIZE virtual machines.
 
-echo ""
-echo "Connection to the client VM:"
-echo "ssh $AZURE_LINUX_USER@$CLIENT_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE"
+VMs deployed:
+$AZURE_VMS_DEPLOYED
 
-echo ""
-echo "Connection to the Linux server VM:"
-echo "ssh $AZURE_LINUX_USER@$LINUX_SERVER_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE"
+Log files for remote script execution were saved at:
+$AZURE_LOG_DIR
 
-echo ""
-echo "Connection to the Windows server VM:"
-echo "mstsc /v:$WINDOWS_SERVER_VM_NAME.cloudapp.net /admin /f"
-echo "User name: $WINDOWS_SERVER_VM_NAME\Administrator"
+To connect to the client VM:
+ssh $AZURE_LINUX_USER@$CLIENT_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE
 
-echo ""
-echo "Connection to the SQL Server VM:"
-echo "mstsc /v:$SQL_SERVER_VM_NAME.cloudapp.net /admin /f"
-echo "User name: $SQL_SERVER_VM_NAME\Administrator"
+To connect to the Linux server VM:
+ssh $AZURE_LINUX_USER@$LINUX_SERVER_VM_NAME.cloudapp.net -i $AZURE_KEY_FILE
 
-echo ""
-echo "Windows Azure Management Portal:"
-echo "https://manage.windowsazure.com"
+To connect to the Windows server VM:
+mstsc /v:$WINDOWS_SERVER_VM_NAME.cloudapp.net /admin /f
+User name: $WINDOWS_SERVER_VM_NAME\Administrator
 
-echo ""
-echo "Log files for remote script execution:"
-echo "$AZURE_LOG_DIR"
+To connect to the SQL Server VM:
+mstsc /v:$SQL_SERVER_VM_NAME.cloudapp.net /admin /f
+User name: $SQL_SERVER_VM_NAME\Administrator
+
+To manage the Windows Azure resources:
+https://manage.windowsazure.com
+
+For your security delete the publish settings file when you don't need it anymore:
+$AZURE_DEPLOYMENT_PUBLISHSETTINGS_LOCATION
+
+Remember to stop the virtual machines when they're not needed anymore.
+VMs in "Stopped (Deallocated)" status don't incur in computing costs.
+Virtual disks (VHD) incur in storage costs until they are deleted.
+_EOF_
 
 # TODO: instructions to stop and start the VMs
 # TODO: instructions to list tests available at each server
 # TODO: instructions to run tests
+
+echo ""
+cat $AZURE_DEPLOYMENT_INSTRUCTIONS_FILE

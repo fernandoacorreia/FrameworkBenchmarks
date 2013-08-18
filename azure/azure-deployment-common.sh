@@ -168,6 +168,7 @@ AZURE_LOG_DIR="/var/log/${AZURE_DEPLOYMENT_NAME}"
 AZURE_LINUX_CONFIGURATION_FILE="/tmp/benchmark-configuration.sh"
 BENCHMARK_REPOSITORY=${BENCHMARK_REPOSITORY:-"https://github.com/TechEmpower/FrameworkBenchmarks.git"}
 BENCHMARK_BRANCH=${BENCHMARK_BRANCH:-"master"}
+AZURE_DEPLOYMENT_INSTRUCTIONS_FILE="$AZURE_LOG_DIR/instructions.txt"
 
 # Under CYGWIN this script uses a helper function to call the Windows Azure command line program.
 if [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ]; then
