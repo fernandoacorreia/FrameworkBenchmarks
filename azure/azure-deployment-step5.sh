@@ -12,20 +12,13 @@ information "*******************************************************************
 information "Step 5: Linux server and client additional setup"
 information "******************************************************************************"
 
-# Reboot Linux server.
-# TODO
-
 # Reboot Linux client.
-# TODO
+echo ""
+reboot_linux_host "$AZURE_LINUX_USER" "$CLIENT_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" || fail "Error rebooting $CLIENT_VM_NAME."
 
-# Wait for Linux server to become available.
-# TODO
-
-# Wait for Linux client to become available.
-# TODO
-
-# Wait for services to become available.
-# TODO
+# Reboot Linux server.
+echo ""
+reboot_linux_host "$AZURE_LINUX_USER" "$LINUX_SERVER_VM_NAME.cloudapp.net" "$AZURE_KEY_FILE" || fail "Error rebooting $LINUX_SERVER_VM_NAME."
 
 # Additional setup.
 echo ""

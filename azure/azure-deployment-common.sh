@@ -106,16 +106,26 @@ function run_remote_script {
     echo "Running script $5 on $3. To watch the progress, run in another terminal:"
     echo "tail -f $log_file"
     mkdir -p $AZURE_LOG_DIR
-    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "bash -x -s" &>$log_file
+    tr -d '\r' < $5 | ssh $2@$3 -i $4 -o StrictHostKeyChecking=no -o BatchMode=yes "bash -x -s" &>$log_file
+}
+
+# Reboots a Linux host.
+function reboot_linux_host {
+    local username=$1
+    local host=$2
+    local private_key_file=$3
+    # Reboot.
+    echo "Rebooting $host"
+    ssh $username@$host -i "$private_key_file" -o StrictHostKeyChecking=no -o BatchMode=yes "sudo reboot"
+    # Wait for reboot to start.
+    sleep 15s
+    # Reconnect.
+    echo "Verifying $host availability"
+    ssh $username@$host -i "$private_key_file" -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectionAttempts=5 -o ConnectTimeout=60 "last reboot | head -1"
+    echo "$host rebooted"
 }
 
 # Uploads a file to a remote Linux host.
-# Parameters:
-# $1 File to upload.
-# $2 Remote user.
-# $3 Remote host.
-# $4 Target directory.
-# $5 Private key file.
 function upload_file {
     local file_to_upload=$1
     local remote_user=$2
@@ -123,7 +133,7 @@ function upload_file {
     local target_directory=$4
     local private_key_file=$5
     echo "Uploading file $file_to_upload to $remote_host:$target_directory"
-    scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i "$private_key_file" "$file_to_upload" "$remote_user@$remote_host:$target_directory" || fail "Error uploading file."
+    scp -o StrictHostKeyChecking=no -i "$private_key_file" "$file_to_upload" "$remote_user@$remote_host:$target_directory" || fail "Error uploading file."
 }
 
 # Check configuration.
