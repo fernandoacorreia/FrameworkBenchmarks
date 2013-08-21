@@ -27,12 +27,12 @@ class Installer:
     #######################################
     # Prerequisites
     #######################################
-    self.__run_command("sudo apt-get update", True)
-    self.__run_command("sudo apt-get upgrade", True)
-    self.__run_command("sudo apt-get install build-essential libpcre3 libpcre3-dev libpcrecpp0 libssl-dev zlib1g-dev python-software-properties unzip git-core libcurl4-openssl-dev libbz2-dev libmysqlclient-dev mongodb-clients libreadline6-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev libgdbm-dev ncurses-dev automake libffi-dev htop libtool bison libevent-dev libgstreamer-plugins-base0.10-0 libgstreamer0.10-0 liborc-0.4-0 libwxbase2.8-0 libwxgtk2.8-0 libgnutls-dev libjson0-dev libmcrypt-dev libicu-dev cmake gettext curl libpq-dev mercurial", True)
-    self.__run_command("sudo add-apt-repository ppa:ubuntu-toolchain-r/test", True)
-    self.__run_command("sudo apt-get update", True)
-    self.__run_command("sudo apt-get install gcc-4.8 g++-4.8", True)
+    self.__run_command("sudo apt-get update")
+    self.__run_command("sudo apt-get upgrade -qq")
+    self.__run_command("sudo apt-get install build-essential libpcre3 libpcre3-dev libpcrecpp0 libssl-dev zlib1g-dev python-software-properties unzip git-core libcurl4-openssl-dev libbz2-dev libmysqlclient-dev mongodb-clients libreadline6-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev libgdbm-dev ncurses-dev automake libffi-dev htop libtool bison libevent-dev libgstreamer-plugins-base0.10-0 libgstreamer0.10-0 liborc-0.4-0 libwxbase2.8-0 libwxgtk2.8-0 libgnutls-dev libjson0-dev libmcrypt-dev libicu-dev cmake gettext curl libpq-dev mercurial -qq")
+    self.__run_command("sudo DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:ubuntu-toolchain-r/test")
+    self.__run_command("sudo apt-get update")
+    self.__run_command("sudo apt-get install gcc-4.8 g++-4.8 -qq")
 
     self.__run_command("cp ../config/benchmark_profile ../../.bash_profile")
     self.__run_command("sudo sh -c \"echo '*               -    nofile          16384' >> /etc/security/limits.conf\"")
@@ -72,7 +72,7 @@ class Installer:
     self.__run_command("sudo cp ../config/erlang.list /etc/apt/sources.list.d/erlang.list")
     self.__run_command("wget -O - http://binaries.erlang-solutions.com/debian/erlang_solutions.asc | sudo apt-key add -")
     self.__run_command("sudo apt-get update")
-    self.__run_command("sudo apt-get install esl-erlang", True)
+    self.__run_command("sudo apt-get install esl-erlang -qq")
 
     #
     # nodejs
@@ -84,8 +84,8 @@ class Installer:
     # Java
     #
 
-    self.__run_command("sudo apt-get install openjdk-7-jdk", True)
-    self.__run_command("sudo apt-get remove --purge openjdk-6-jre openjdk-6-jre-headless", True)
+    self.__run_command("sudo apt-get install openjdk-7-jdk -qq")
+    self.__run_command("sudo apt-get remove --purge openjdk-6-jre openjdk-6-jre-headless -qq")
 
     #
     # Ruby/JRuby
@@ -93,16 +93,16 @@ class Installer:
 
     self.__run_command("curl -L get.rvm.io | bash -s head")
     self.__run_command("echo rvm_auto_reload_flag=2 >> ~/.rvmrc")
-    self.__bash_from_string("source ~/.rvm/scripts/'rvm' && rvm install 2.0.0-p0")
-    self.__bash_from_string("source ~/.rvm/scripts/'rvm' && rvm 2.0.0-p0 do gem install bundler")
-    self.__bash_from_string("source ~/.rvm/scripts/'rvm' && rvm install jruby-1.7.4")
-    self.__bash_from_string("source ~/.rvm/scripts/'rvm' && rvm jruby-1.7.4 do gem install bundler")
+    self.__run_command("bash -c 'source ~/.rvm/scripts/rvm && rvm install 2.0.0-p0'")
+    self.__run_command("bash -c 'source ~/.rvm/scripts/rvm && rvm 2.0.0-p0 do gem install bundler'")
+    self.__run_command("bash -c 'source ~/.rvm/scripts/rvm && rvm install jruby-1.7.4'")
+    self.__run_command("bash -c 'source ~/.rvm/scripts/rvm && rvm jruby-1.7.4 do gem install bundler'")
 
     # We need a newer version of jruby-rack
     self.__run_command("git clone git://github.com/jruby/jruby-rack.git")
-    self.__bash_from_string("cd jruby-rack && source ~/.rvm/scripts/'rvm' && rvm jruby-1.7.4 do bundle install")
-    self.__bash_from_string("cd jruby-rack && source ~/.rvm/scripts/'rvm' && rvm jruby-1.7.4 do jruby -S bundle exec rake clean gem SKIP_SPECS=true")
-    self.__bash_from_string("cd jruby-rack/target && source ~/.rvm/scripts/'rvm' && rvm jruby-1.7.4 do gem install jruby-rack-1.2.0.SNAPSHOT.gem")
+    self.__run_command("bash -c 'cd jruby-rack && source ~/.rvm/scripts/rvm && rvm jruby-1.7.4 do bundle install'")
+    self.__run_command("bash -c 'cd jruby-rack && source ~/.rvm/scripts/rvm && rvm jruby-1.7.4 do jruby -S bundle exec rake clean gem SKIP_SPECS=true'")
+    self.__run_command("bash -c 'cd jruby-rack/target && source ~/.rvm/scripts/rvm && rvm jruby-1.7.4 do gem install jruby-rack-1.2.0.SNAPSHOT.gem'")
 
     #
     # go
@@ -125,7 +125,7 @@ class Installer:
             raise Exception('Could not download ActivePerl after many retries')
         time.sleep(5)
 
-    self.__run_command("sudo ./install.sh --license-accepted --prefix /opt/ActivePerl-5.16 --no-install-html", cwd="ActivePerl-5.16.3.1603-x86_64-linux-glibc-2.3.5-296746", send_yes=True)
+    self.__run_command("sudo bash -c 'cd ActivePerl-5.16.3.1603-x86_64-linux-glibc-2.3.5-296746 && yes | ./install.sh --license-accepted --prefix /opt/ActivePerl-5.16 --no-install-html'")
     self.__run_command("curl -L http://cpanmin.us | perl - --sudo App::cpanminus")
     self.__run_command("cpanm -f -S DBI DBD::mysql Kelp Dancer Mojolicious Kelp::Module::JSON::XS Dancer::Plugin::Database Starman Plack JSON Web::Simple DBD::Pg JSON::XS EV HTTP::Parser::XS Monoceros EV IO::Socket::IP IO::Socket::SSL")
 
@@ -135,10 +135,10 @@ class Installer:
 
     self.__run_command("wget --trust-server-names http://www.php.net/get/php-5.4.13.tar.gz/from/us1.php.net/mirror")
     self.__run_command("tar xvf php-5.4.13.tar.gz")
-    self.__run_command("./configure --with-pdo-mysql --with-mysql --with-mcrypt --enable-intl --enable-mbstring --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --with-openssl", cwd="php-5.4.13")
-    self.__run_command("make", cwd="php-5.4.13")
-    self.__run_command("sudo make install", cwd="php-5.4.13")
-    self.__run_command("printf \"\\n\" | sudo pecl install apc-beta", cwd="php-5.4.13")
+    self.__run_command("cd php-5.4.13 && ./configure --with-pdo-mysql --with-mysql --with-mcrypt --enable-intl --enable-mbstring --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --with-openssl")
+    self.__run_command("cd php-5.4.13 && make")
+    self.__run_command("cd php-5.4.13 && sudo make install")
+    self.__run_command("cd php-5.4.13 && printf \"\\n\" | sudo pecl install apc-beta")
     self.__run_command("sudo cp ../config/php.ini /usr/local/lib/php.ini")
     self.__run_command("sudo cp ../config/php-fpm.conf /usr/local/lib/php-fpm.conf")
     self.__run_command("rm php-5.4.13.tar.gz")
@@ -148,7 +148,7 @@ class Installer:
 
     # Phalcon
     self.__run_command("git clone git://github.com/phalcon/cphalcon.git")
-    self.__run_command("sudo ./install", cwd="cphalcon/build")
+    self.__run_command("cd cphalcon/build && sudo ./install")
 
     # YAF
     self.__run_command("sudo pecl install yaf")
@@ -157,43 +157,43 @@ class Installer:
     # Haskell
     #
 
-    self.__run_command("sudo apt-get install ghc cabal-install", True)
+    self.__run_command("sudo apt-get install ghc cabal-install -qq")
 
     #
     # RingoJs
     #
     self.__run_command("wget http://www.ringojs.org/downloads/ringojs_0.9-1_all.deb")
-    self.__run_command("sudo apt-get install jsvc", True)
-    self.__run_command("sudo dpkg -i ringojs_0.9-1_all.deb", True)
+    self.__run_command("sudo apt-get install jsvc -qq")
+    self.__run_command("sudo DEBIAN_FRONTEND=noninteractive dpkg -i ringojs_0.9-1_all.deb")
     self.__run_command("rm ringojs_0.9-1_all.deb")
 
     #
     # Mono
     #
     self.__run_command("git clone git://github.com/mono/mono")
-    self.__run_command("git checkout mono-3.0.10", cwd="mono")
-    self.__run_command("./autogen.sh --prefix=/usr/local", cwd="mono")
-    self.__run_command("make get-monolite-latest", cwd="mono")
-    self.__run_command("make EXTERNAL_MCS=${PWD}/mcs/class/lib/monolite/gmcs.exe", cwd="mono")
-    self.__run_command("sudo make install", cwd="mono")
+    self.__run_command("cd mono && git checkout mono-3.0.10")
+    self.__run_command("cd mono && ./autogen.sh --prefix=/usr/local")
+    self.__run_command("cd mono && make get-monolite-latest")
+    self.__run_command("cd mono && make EXTERNAL_MCS=${PWD}/mcs/class/lib/monolite/gmcs.exe")
+    self.__run_command("cd mono && sudo make install")
 
     self.__run_command("mozroots --import --sync")
 
     self.__run_command("git clone git://github.com/mono/xsp")
-    self.__run_command("git checkout 3.0", cwd="xsp")
-    self.__run_command("./autogen.sh --prefix=/usr/local", cwd="xsp")
-    self.__run_command("make", cwd="xsp")
-    self.__run_command("sudo make install", cwd="xsp")
+    self.__run_command("cd xsp && git checkout 3.0")
+    self.__run_command("cd xsp && ./autogen.sh --prefix=/usr/local")
+    self.__run_command("cd xsp && make")
+    self.__run_command("cd xsp && sudo make install")
 
     #
     # Nimrod
     #
     self.__run_command("wget http://www.nimrod-code.org/download/nimrod_0.9.2.zip")
     self.__run_command("unzip nimrod_0.9.2.zip")
-    self.__run_command("chmod +x build.sh", cwd="nimrod")
-    self.__run_command("./build.sh", cwd="nimrod")
-    self.__run_command("chmod +x install.sh", cwd="nimrod")
-    self.__run_command("sudo ./install.sh /usr/bin", cwd="nimrod")
+    self.__run_command("cd nimrod && chmod +x build.sh")
+    self.__run_command("cd nimrod && ./build.sh")
+    self.__run_command("cd nimrod && chmod +x install.sh")
+    self.__run_command("cd nimrod && sudo ./install.sh /usr/bin")
 
     #######################################
     # Webservers
@@ -203,17 +203,17 @@ class Installer:
     # Nginx
     #
     self.__run_command("curl http://nginx.org/download/nginx-1.4.1.tar.gz | tar xvz")
-    self.__run_command("./configure", cwd="nginx-1.4.1")
-    self.__run_command("make", cwd="nginx-1.4.1")
-    self.__run_command("sudo make install", cwd="nginx-1.4.1")
+    self.__run_command("cd nginx-1.4.1 && ./configure")
+    self.__run_command("cd nginx-1.4.1 && make")
+    self.__run_command("cd nginx-1.4.1 && sudo make install")
 
     #
     # Openresty (nginx with openresty stuff)
     #
     self.__run_command("curl http://openresty.org/download/ngx_openresty-1.2.7.5.tar.gz | tar xvz")
-    self.__run_command("./configure --with-luajit", cwd="ngx_openresty-1.2.7.5")
-    self.__run_command("make", cwd="ngx_openresty-1.2.7.5")
-    self.__run_command("sudo make install", cwd="ngx_openresty-1.2.7.5")
+    self.__run_command("cd ngx_openresty-1.2.7.5 && ./configure --with-luajit")
+    self.__run_command("cd ngx_openresty-1.2.7.5 && make")
+    self.__run_command("cd ngx_openresty-1.2.7.5 && sudo make install")
 
     #
     # Resin
@@ -221,12 +221,12 @@ class Installer:
 
     self.__run_command("sudo cp -r /usr/lib/jvm/java-1.7.0-openjdk-amd64/include /usr/lib/jvm/java-1.7.0-openjdk-amd64/jre/bin/")
     self.__run_command("curl http://www.caucho.com/download/resin-4.0.36.tar.gz | tar xz")
-    self.__run_command("./configure --prefix=`pwd`", cwd="resin-4.0.36")
-    self.__run_command("make", cwd="resin-4.0.36")
-    self.__run_command("make install", cwd="resin-4.0.36")
-    self.__run_command("mv conf/resin.properties conf/resin.properties.orig", cwd="resin-4.0.36")
+    self.__run_command("cd resin-4.0.36 && ./configure --prefix=`pwd`")
+    self.__run_command("cd resin-4.0.36 && make")
+    self.__run_command("cd resin-4.0.36 && sudo make install")
+    self.__run_command("cd resin-4.0.36 && mv conf/resin.properties conf/resin.properties.orig")
     self.__run_command("cat ../config/resin.properties > resin-4.0.36/conf/resin.properties")
-    self.__run_command("mv conf/resin.xml conf/resin.xml.orig", cwd="resin-4.0.36")
+    self.__run_command("cd resin-4.0.36 && mv conf/resin.xml conf/resin.xml.orig")
     self.__run_command("cat ../config/resin.xml > resin-4.0.36/conf/resin.xml")
 
     ##############################################################
@@ -261,15 +261,15 @@ class Installer:
     #
     # TreeFrog Framework
     #
-    self.__run_command("sudo apt-get install qt4-qmake libqt4-dev libqt4-sql-mysql g++", True)
+    self.__run_command("sudo apt-get install qt4-qmake libqt4-dev libqt4-sql-mysql g++ -qq")
     self.__run_command("wget http://downloads.sourceforge.net/project/treefrog/src/treefrog-1.6.tar.gz")
     self.__run_command("tar xzf treefrog-1.6.tar.gz")
     self.__run_command("rm treefrog-1.6.tar.gz")
-    self.__run_command("./configure --enable-mongo", cwd="treefrog-1.6")
-    self.__run_command("make", cwd="treefrog-1.6/src")
-    self.__run_command("sudo make install", cwd="treefrog-1.6/src")
-    self.__run_command("make", cwd="treefrog-1.6/tools")
-    self.__run_command("sudo make install", cwd="treefrog-1.6/tools")
+    self.__run_command("cd treefrog-1.6 && ./configure --enable-mongo")
+    self.__run_command("cd treefrog-1.6/src && make")
+    self.__run_command("cd treefrog-1.6/src && sudo make install")
+    self.__run_command("cd treefrog-1.6/tools && make")
+    self.__run_command("cd treefrog-1.6/tools && sudo make install")
 
     #
     # Vert.x
@@ -294,9 +294,9 @@ class Installer:
 
   def _install_python(self):
     # .profile is not loaded yet. So we should use full path.
-    pypy_bin   = "~/FrameworkBenchmarks/installs/pypy/bin"
-    python_bin = "~/FrameworkBenchmarks/installs/py2/bin"
-    python3_bin= "~/FrameworkBenchmarks/installs/py3/bin"
+    pypy_bin   = "pypy/bin"
+    python_bin = "py2/bin"
+    python3_bin= "py3/bin"
     def easy_install(pkg, two=True, three=False, pypy=False):
       cmd = "/easy_install -ZU '" + pkg + "'"
       if two:   self.__run_command(python_bin + cmd)
@@ -307,12 +307,12 @@ class Installer:
     self.__run_command('ln -sf pypy-2.0.2 pypy')
     self.__run_command("curl -L http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz | tar xz")
     self.__run_command("curl -L http://www.python.org/ftp/python/3.3.2/Python-3.3.2.tar.xz | tar xJ")
-    self.__run_command("./configure --prefix=$HOME/FrameworkBenchmarks/installs/py2 --disable-shared CC=gcc-4.8", cwd="Python-2.7.5")
-    self.__run_command("./configure --prefix=$HOME/FrameworkBenchmarks/installs/py3 --disable-shared CC=gcc-4.8", cwd="Python-3.3.2")
-    self.__run_command("make -j", cwd="Python-2.7.5")
-    self.__run_command("make install", cwd="Python-2.7.5")
-    self.__run_command("make -j", cwd="Python-3.3.2")
-    self.__run_command("make install", cwd="Python-3.3.2")
+    self.__run_command("cd Python-2.7.5 && ./configure --prefix=$HOME/FrameworkBenchmarks/installs/py2 --disable-shared CC=gcc-4.8")
+    self.__run_command("cd Python-3.3.2 && ./configure --prefix=$HOME/FrameworkBenchmarks/installs/py3 --disable-shared CC=gcc-4.8")
+    self.__run_command("cd Python-2.7.5 && make -j")
+    self.__run_command("cd Python-2.7.5 && make install")
+    self.__run_command("cd Python-3.3.2 && make -j")
+    self.__run_command("cd Python-3.3.2 && make install")
 
     self.__run_command("wget https://bitbucket.org/pypa/setuptools/downloads/ez_setup.py")
     self.__run_command(pypy_bin + "/pypy ez_setup.py")
@@ -373,7 +373,7 @@ class Installer:
   def __install_client_software(self):
     print("\nINSTALL: Installing client software\n")
 
-    self.__run_command("cd .. && " + self.benchmarker.sftp_string(batch_file="config/client_sftp_batch"), True)
+    self.__run_command("cd .. && " + self.benchmarker.sftp_string(batch_file="config/client_sftp_batch"))
 
     remote_script = """
 
@@ -470,35 +470,17 @@ class Installer:
 
   ############################################################
   # __run_command
+  # All commands run as-is on install_dir
+  # and generate logs which can be reviewed
+  # with grep '^INSTALL'
   ############################################################
-  def __run_command(self, command, send_yes=False, cwd=None):
-    try:
-      cwd = os.path.join(self.install_dir, cwd)
-    except AttributeError:
-      cwd = self.install_dir
-
-    print("\nINSTALL: %s (cwd=%s)" % (command, cwd))
-    if send_yes:
-      process = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, cwd=cwd)
-      process.communicate("yes")
-      returncode = process.returncode
-    else:
-      returncode = subprocess.call(command, shell=True, cwd=cwd)
-
+  def __run_command(self, command):
+    print("\nINSTALL: %s" % command)
+    returncode = subprocess.call(command, shell=True, cwd=self.install_dir)
     if returncode != 0:
-      self.__install_error("status code %s running command '%s' in directory '%s'." % (returncode, command, cwd))
+      self.__install_error("status code %s running command '%s' in directory '%s'." % (returncode, command, self.install_dir))
   ############################################################
   # End __run_command
-  ############################################################
-
-  ############################################################
-  # __bash_from_string
-  # Runs bash -c "command" in install_dir.
-  ############################################################
-  def __bash_from_string(self, command):
-    self.__run_command('bash -c "%s"' % command)
-  ############################################################
-  # End __bash_from_string
   ############################################################
 
   ############################################################
