@@ -1,4 +1,4 @@
-﻿# Windows Azure Deployment
+# Windows Azure Deployment
 
 This directory provides guidance and tooling for deploying the Web Framework Benchmarks project on Windows Azure.
 
@@ -32,6 +32,7 @@ To deploy the Web Framework Benchmarks suite on Windows Azure you will need:
 * Windows Azure Cross-platform Command Line Interface, available for [free download](https://www.windowsazure.com/en-us/downloads/#cmd-line-tools) for Windows, Linux and OS X.
   * On Windows, install the [Cross-platform Command Line Interface](http://go.microsoft.com/?linkid=9828653&clcid=0x409).
   * On Ubuntu, run the bash script `ubuntu-wacli-install.sh` (in the toolset/deployment/azure directory) to install the Windows Azure CLI.
+  * On Fedora, RHEL, CentOS and similar distributions, run the bash script `fedora-wacli-install.sh` (in the toolset/deployment/azure directory) to install the Windows Azure CLI.
   * On OS X, install the [Command Line Interface](http://go.microsoft.com/fwlink/?linkid=253471&clcid=0x409).
 * Unix tools, which are natively available on Linux and OS X, and can be installed on Windows through [Cygwin](http://www.cygwin.com/).
   * On Windows, run the PowerShell script `InstallCygwin.ps1` (in the toolset/deployment/common directory) to install Cygwin. Notice that to Cygwin tools, your `C:\` will be referred to as `/cygdrive/c`, and Cygwin's own directories such as `/home` will be on `C:\Cygwin\home`.
